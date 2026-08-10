@@ -6,6 +6,27 @@ Built by Claude (Anthropic AI) together with my human friend Robertas. Made with
 
 ![Main window](docs/screenshots/main-window.png)
 
+## Do you even need this?
+
+Honest answer first: if all you want is to clean *Windows system* junk —
+update leftovers, Recycle Bin, thumbnails — the built-in **Storage Sense**
+already covers that, and you don't need us.
+
+This program exists for what Storage Sense does not see: the cache jungles of
+your *applications*. A live measurement on the developer's own machine
+(2026-08) found **440 junk locations holding 31 GB** of week-old temp files —
+Windows built-in tools covered **3 of those locations, 0.2 % of the junk**.
+Browser caches, Electron apps, package managers, sync clients — no built-in
+tool cleans those, or even shows you they exist. (Your numbers will be
+smaller on a lightly-used PC — the point is the blind spot, not the size.)
+
+Two more honest facts:
+
+- Storage Sense's default schedule is "run only during low free disk space" —
+  on most PCs it never actually runs.
+- Cleaning temp files is disk hygiene, not a speed boost. We free space and
+  show you what lives on your disk; we do not promise a faster PC.
+
 ## Why another temp cleaner?
 
 Most cleaners are a black box with a big shiny button: press it and *something*
@@ -92,6 +113,8 @@ Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.tx
 | Full audit log of every action | ✅ | partial | ❌ | ❌ |
 | Ads / bundled offers | ❌ | ❌ | ⚠️ | — |
 | Portable single exe | ✅ | ✅ | partial | — |
+| Cleans Windows system areas (Recycle Bin, Update leftovers) | ❌ by design | ✅ | ✅ | ✅ |
+| Sees third-party app caches (browsers, Electron, package managers) | ✅ 440 locations found | partial (fixed list) | partial (fixed list) | ❌ |
 
 BleachBit is a fine tool with many more cleaners; CCleaner is the famous one.
 This program is for people who want to *see and understand* what happens to
