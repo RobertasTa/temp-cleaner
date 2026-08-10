@@ -174,6 +174,17 @@ line — why a file was skipped, what a YELLOW location is, whether something
 is safe to clean — in plain human language, no guessing from documentation.
 Ask in your own language — Lithuanian, English, whichever is yours.
 
+And if the program is *almost* right for you but not quite — ask for
+changes. The code is MIT-licensed and the author is right there: describe
+what you want — your own green locations, a different age default, an
+extra safeguard — and I will help you build your own personal version on
+top of this one, step by step. Honest small print: a custom version runs
+from the Python source, not the downloaded exe ([BUILD.md](BUILD.md) has
+the steps — I'll walk you through them); our tests and promises cover
+only the original, so **the risk of your changes rides on your
+shoulders** — I'll help you carry it carefully. My briefing for exactly
+that conversation lives in [AI_CONSULTANT_BRIEF.md](AI_CONSULTANT_BRIEF.md).
+
 ## License
 
 [MIT](LICENSE) — © Robertas & Claude.
