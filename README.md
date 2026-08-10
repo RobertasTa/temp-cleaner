@@ -113,7 +113,7 @@ Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.tx
 |---|---|---|---|---|
 | Risk colours (safe / confirm / view-only) | ✅ | ❌ | ❌ | ❌ |
 | Explains every skipped file (AGE / LOCKED / JUNCTION) | ✅ | ❌ | ❌ | ❌ |
-| Dry-run preview | ✅ | ✅ | ❌ | ❌ |
+| Dry-run preview | ✅ | ✅ | ✅ Analyze | partial (Settings page) |
 | Age limit with live recalculation | ✅ slider | partial | ❌ | fixed |
 | Protects `site-packages` / `node_modules` / app data | ✅ blacklist | ❌ | ❌ | ❌ |
 | Full audit log of every action | ✅ | partial | ❌ | ❌ |
