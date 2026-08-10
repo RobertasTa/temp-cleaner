@@ -28,7 +28,7 @@ No other cleaner we tried explains itself like that.
 - **Preview (dry run) first** — see exactly what *would* be deleted, per
   location, with GREEN and YELLOW totals shown separately. Nothing is touched.
 
-  ![Preview](docs/screenshots/preview.png)
+  ![Preview: status line and per-location log](docs/screenshots/preview-focus.png)
 
 - **Age limit slider (1–30 days)** — only files *older* than the limit are ever
   deleted; the preview numbers update live as you drag. Fresh downloads and
@@ -38,7 +38,7 @@ No other cleaner we tried explains itself like that.
 - **Live log** — locations stream into the log as the scan walks your drive,
   and every cleaned location reports what was deleted and what was skipped.
 
-  ![After cleaning](docs/screenshots/cleaned.png)
+  ![After cleaning: honest counters and per-location log](docs/screenshots/cleaned-focus.png)
 
 - **Deletes only files, never folder structure; never follows junctions or
   symlinks** — a link pointing at your real data is skipped and logged.
