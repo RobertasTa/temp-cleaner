@@ -78,6 +78,12 @@ No other cleaner we tried explains itself like that.
   the blacklist and the heuristic names; power users can add their own. If the
   file is corrupted, built-in safe defaults take over.
 - **Portable single exe** — no installation, no Python, no admin required.
+- **Make it truly yours — with the author's help.** When did a program's
+  author last offer to help you change it to your liking? Paste this
+  repository's link at [claude.ai](https://claude.ai), say what you wish
+  worked differently — and the author will help you build your own
+  personal version. Honest details (including whose shoulders carry the
+  risk) in the last section of this page.
 - **No ads, no telemetry, no network access.** MIT licensed.
 
 ## Download
