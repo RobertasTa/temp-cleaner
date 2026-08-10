@@ -1,0 +1,17 @@
+{
+  "_pastaba": "Temp valytuvo vietu zinynas. Galima pildyti ranka - programa perskaito paleidimo metu. Bazes: TEMP (vartotojo temp), WINTEMP (Windows\\Temp), LOCALAPPDATA (AppData\\Local).",
+  "_pastaba_zalios": "zalios_vietos - kuruotos SAUGIOS valymo vietos. kelias tuscias = pati baze. Kelias rasomas su / skirtuku.",
+  "zalios_vietos": [
+    { "baze": "TEMP", "kelias": "" },
+    { "baze": "WINTEMP", "kelias": "" },
+    { "baze": "LOCALAPPDATA", "kelias": "NVIDIA/DXCache" },
+    { "baze": "LOCALAPPDATA", "kelias": "pip/cache" },
+    { "baze": "LOCALAPPDATA", "kelias": "Google/Chrome/User Data/Default/Cache" }
+  ],
+  "_pastaba_juodas": "juodasis_sarasas - jei sis zodis yra kelyje ar pirmame katalogo lygyje, vieta RAUDONA (netrinama).",
+  "juodasis_sarasas": ["models", "data", "profiles", "backup", "save", "config", "site-packages", "node_modules"],
+  "_pastaba_heuristika": "heuristiniai_vardai - katalogu vardai, kuriu ieskoma AppData/ProgramData skene.",
+  "heuristiniai_vardai": ["temp", "tmp", "cache", "logs"],
+  "_pastaba_amzius": "amzius_dienomis - numatytasis amziaus saugiklis (trinami tik senesni failai). GUI slankiklis 1-30 d. ji keicia sesijai.",
+  "amzius_dienomis": 7
+}
