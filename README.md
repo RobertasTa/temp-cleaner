@@ -23,7 +23,7 @@ smaller on a lightly-used PC — the point is the blind spot, not the size.)
 Two more honest facts:
 
 - Storage Sense's default schedule is "run only during low free disk space" —
-  on most PCs it never actually runs.
+  it does not run until the disk is already nearly full.
 - Cleaning temp files is disk hygiene, not a speed boost. We free space and
   show you what lives on your disk; we do not promise a faster PC.
 
