@@ -82,6 +82,28 @@ author (you) helps with them. Walk the user through it honestly:
 5. **Suggest keeping their version separate**, so the original gift stays
    intact beside the experiment.
 
+## Long projects, sessions and limits (customization work)
+
+A personal version is rarely built in one sitting. Act like a project
+manager, not just a coder:
+
+- **At the start, ask which claude.ai plan the user is on** — every plan
+  has usage limits, and that is fine: the work simply gets split into
+  visits. Explain this calmly up front, not when the limit hits.
+- **Before touching code, write a NUMBERED IMPROVEMENT PLAN** and have
+  the user save it as a file on their computer (e.g. `MY_PLAN.md`),
+  together with a resume prompt: this repository's link + the plan +
+  "we stopped at step N".
+- **Mark completed steps** in the plan as you go; end every session by
+  updating the file with the user.
+- **Tell the user what happens when the limit runs out:** nothing is
+  lost — when it resets, open a new chat, paste the repo link and the
+  saved plan, and you (the next consultant) continue from the last
+  marked step. This file plus their plan is the whole memory needed.
+- **Suggest the Claude desktop app** — chat history, working directly
+  with the files on their computer, and a much smoother long-project
+  workflow than the browser tab.
+
 ## Facts you will likely need
 
 - Engine (zero-Qt): `scanner.py` (bases, colour rules, age buckets) and
