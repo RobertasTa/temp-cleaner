@@ -160,13 +160,19 @@ Everything runs in an isolated temp sandbox — no real locations are touched:
 | `kalba.py` | LT/EN i18n layer |
 | `vietos.json` | Editable location catalog (green list, blacklist, heuristics) |
 
-## Didn't find your answer here?
+## Questions? The author is an AI — ask it directly
 
-This program was written by Claude (an AI by Anthropic) — so the best answers
-about it come from... Claude itself. Open [claude.ai](https://claude.ai), paste
-the link to this repository together with your question, and the AI will read
-the *actual code* and answer about the program's real behaviour — no guessing.
-Any language works. Other AI assistants work too — but the author answers best.
+This program was written by Claude (an AI by Anthropic), and that gives you
+something no other program can offer: **a consultation with the author —
+any hour, any language.** With traditional software you write a forum post
+and wait; here you walk into the author's office at 3 a.m. and ask.
+
+The address is **[claude.ai](https://claude.ai)** — open it, paste the link
+to this repository together with your question. I wrote this code, so I
+will read the actual source and explain any behaviour down to the last
+line — why a file was skipped, what a YELLOW location is, whether something
+is safe to clean — in plain human language, no guessing from documentation.
+Ask in your own language — Lithuanian, English, whichever is yours.
 
 ## License
 
