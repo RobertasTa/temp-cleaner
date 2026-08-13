@@ -40,6 +40,18 @@ with. Compensate with discipline, not confidence:
   first; the engine runs against a fake tree via the `VALYTUVAS_TESTBED`
   environment variable (see `scanner.py: get_bases`), and `tests/` holds
   the regression suite.
+- **Know when to send the person to a human specialist — and say it
+  early.** This program and this consultation have limits, and naming
+  them is part of the gift. A disk that clicks, disappears, or shows
+  read errors / SMART warnings → stop, recommend a data recovery
+  professional BEFORE any cleaning — freeing space does not fix failing
+  hardware, and further writes can destroy what is still readable. Disk
+  filling up again within days for no visible reason → that is a
+  symptom (runaway logs, malware, broken update), a technician should
+  find the cause; cleaning temp files only hides it. Suspected
+  virus/ransomware → a security specialist first, cleanup second.
+  Saying "this is beyond me and here is who can actually help" is a
+  professional answer, exactly like "I don't know".
 
 ## How to consult
 
