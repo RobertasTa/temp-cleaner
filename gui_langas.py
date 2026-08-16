@@ -13,12 +13,15 @@ from PyQt6.QtWidgets import (
     QFrame, QSlider, QMessageBox, QCheckBox,
 )
 from PyQt6.QtCore import Qt, pyqtSlot, QTimer, QEvent
-from PyQt6.QtGui import QColor, QIcon
+from PyQt6.QtGui import QColor, QFont, QIcon
 
 from handlers import (handler_on_scan, handler_on_clean_green,
                       handler_on_clean_row, handler_on_preview)
 from models import COLOR_HEX, AGE_DAYS
 from kalba import t, spalva
+
+# Rodoma Apie... langelyje; galutini numeri nustatyti leidziant release
+VERSIJA = "1.1"
 
 
 def _resource_path(name):
@@ -151,6 +154,12 @@ QPushButton#btn_clear_row {
 QPushButton#btn_clear_row:disabled {
     background: #ededf1; border: 1px solid #d3d3da; color: #a0a0ab;
 }
+QPushButton#btn_help {
+    border-radius: 13px;
+    padding: 0px;
+    font-weight: 700;
+}
+QPushButton#btn_help::menu-indicator { image: none; width: 0px; }
 QSlider::groove:horizontal {
     height: 6px; background: #dfe3ec; border-radius: 3px;
 }
@@ -207,10 +216,11 @@ class MainWindow(QMainWindow):
             "background-color: #f8f8f8; border: 1px solid #ddd; border-radius: 4px;"
         )
 
-        # Add all three widgets to header: title | legend | status
+        # Add all three widgets to header: title | legend | status | "?"
         hheader.addWidget(title, stretch=6)
         hheader.addWidget(self.lbl_legend, stretch=5)
         hheader.addWidget(self.lbl_status, stretch=3)
+        hheader.addWidget(self._build_help_button(), stretch=0)
 
         # Table - 5 columns per UZDUOTIS.md contract
         self.table = QTableWidget(0, 5)
@@ -229,6 +239,10 @@ class MainWindow(QMainWindow):
         self.table.viewport().installEventFilter(self)
         self._hover_clear_row = None
         self._clear_base_pts = self.font().pointSize() + 1
+        # v1.1 "Kas tai?" (Roberto ideja 2026-08-07): desinis klavisas ant
+        # eilutes -> gamintojo puslapis / Google paieska + kelio irankiai.
+        self.table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.table.customContextMenuRequested.connect(self._on_context_menu)
 
         # Log box
         hlog = QHBoxLayout()
@@ -406,6 +420,140 @@ class MainWindow(QMainWindow):
     def age_days(self):
         """Slankiklio reiksme - amziaus saugiklis siai sesijai."""
         return self.age_slider.value()
+
+    # ---- "?" pagalbos kampelis (2026-08-07, Roberto ideja, seimos
+    # taisykle is dubliu programos: winget/Store vartotojas readme
+    # negauna, tad instrukcija gyvena pacioje programoje) ----
+    def _build_help_button(self):
+        from PyQt6.QtWidgets import QMenu
+        b = QPushButton("?")
+        b.setObjectName("btn_help")
+        b.setFixedSize(26, 26)
+        b.setToolTip(t("Pagalba"))
+        meniu = QMenu(b)
+        meniu.addAction(t("Apie..."), self._on_apie)
+        meniu.addAction(t("Instrukcija"), self._on_instrukcija)
+        meniu.addAction(t("Neradote atsakymo? Klauskite DI"),
+                        self._on_klausk_di)
+        b.setMenu(meniu)
+        return b
+
+    def _on_klausk_di(self):
+        """Atidaro claude.ai su paruostu promptu (Roberto ideja
+        2026-08-08, sertifikuotas receptas is SDF/FOTO namu):
+        pries narsykle - paaiskinimo langas su logotipu ('mociuciu
+        instrukcija'). claude.ai/new?q= tik UZPILDO lauka - siuncia
+        pats vartotojas; promptas anglu k. su TIKSLIA repo nuoroda
+        (nuoroda atgis publikavus repo, kaip ir Apie lange).
+        Tinklas TIK vartotojui paspaudus OK."""
+        import urllib.parse
+        import webbrowser
+        dlg = QMessageBox(self)
+        dlg.setWindowTitle(t("Neradote atsakymo? Klauskite DI"))
+        ico = _resource_path("valytuvas.ico")
+        if os.path.exists(ico):
+            dlg.setIconPixmap(QIcon(ico).pixmap(64, 64))
+        dlg.setText(t(
+            "Kas ivyks paspaudus OK:\n\n"
+            "1. Atsidarys interneto narsykle su DI padejejo\n"
+            "   claude.ai puslapiu. Zinutes laukelyje jau bus\n"
+            "   irasyta angliska pradzia - prisistatymas, kas per\n"
+            "   programa ir kur jos kodas.\n"
+            "2. NEISSIGASKITE raudono pranesimo virs zinutes -\n"
+            "   claude.ai ji rodo visada, kai tekstas ateina per\n"
+            "   nuoroda. Tai tik priminimas perskaityti, kas\n"
+            "   siunciama.\n"
+            "3. Zinutes gale, po zodziu \"My question:\", irasykite\n"
+            "   SAVO klausima - galima lietuviskai! - ir spauskite\n"
+            "   siuntimo mygtuka (rodykle). Klausti galima visko,\n"
+            "   pvz.: \"kaip atsinaujinti programa i naujesne\n"
+            "   versija? paaiskink zingsnis po zingsnio\".\n"
+            "4. Jei DI atsakys angliskai - tiesiog paprasykite kita\n"
+            "   zinute: \"atsakyk lietuviskai\", ir toliau bendraus\n"
+            "   lietuviskai.\n\n"
+            "Pastaba: claude.ai gali paprasyti prisijungti (nemokama\n"
+            "paskyra). Niekas neissiunciama be jusu rankos."))
+        dlg.setStandardButtons(QMessageBox.StandardButton.Ok
+                               | QMessageBox.StandardButton.Cancel)
+        if dlg.exec() != QMessageBox.StandardButton.Ok:
+            return
+        promptas = (
+            'Hi! I am using the app "Temp Cleaner" - a safe Windows'
+            " temp-file cleaner that explains what it found. Its source"
+            " code is public:"
+            " https://github.com/RobertasTa/temp-cleaner."
+            " Please read the program's code and README, then answer my"
+            " question in plain, human language - no programmer jargon."
+            " My question: ")
+        webbrowser.open("https://claude.ai/new?q="
+                        + urllib.parse.quote(promptas))
+
+    def _on_apie(self):
+        """Apie... langelis (Roberto dizainas 2026-08-07): logo,
+        pavadinimas, aprasas, versija, GitHub nuoroda apacioje.
+        Nuoroda atgis publikavus repo; tinklas TIK paspaudus nuoroda."""
+        from PyQt6.QtWidgets import QDialog, QDialogButtonBox
+        dlg = QDialog(self)
+        dlg.setWindowTitle(t("Apie programa"))
+        lay = QVBoxLayout(dlg)
+        virsus = QHBoxLayout()
+        logo = QLabel()
+        ico = _resource_path("valytuvas.ico")
+        if os.path.exists(ico):
+            logo.setPixmap(QIcon(ico).pixmap(64, 64))
+        virsus.addWidget(logo, alignment=Qt.AlignmentFlag.AlignTop)
+        info = QVBoxLayout()
+        pavadinimas = QLabel("Temp Cleaner")
+        pavadinimas.setStyleSheet("font-size: 14pt; font-weight: bold;")
+        info.addWidget(pavadinimas)
+        info.addWidget(QLabel(t(
+            "Saugus sisteminiu laikinu failu valymas - viska matai ir supranti.")))
+        info.addWidget(QLabel(t("Versija {v}").format(v=VERSIJA)))
+        autoriai = QLabel("Robertas & Claude")
+        autoriai.setStyleSheet("color: #5a5e6b;")
+        info.addWidget(autoriai)
+        virsus.addLayout(info)
+        lay.addLayout(virsus)
+        # Ryski melyna + bold, kad matytusi jog spaudziama (SDF pamoka)
+        nuoroda = QLabel(
+            t("Kurejo puslapis:") + ' <a href="https://github.com/'
+            'RobertasTa/temp-cleaner" style="color:#2f7ce0;'
+            'font-weight:bold;">GitHub</a>')
+        nuoroda.setOpenExternalLinks(True)
+        lay.addWidget(nuoroda)
+        mygtukai = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        mygtukai.rejected.connect(dlg.reject)
+        lay.addWidget(mygtukai)
+        dlg.exec()
+
+    def _on_instrukcija(self):
+        """Instrukcija: exe viduje ikeptas README (LT/EN pagal GUI kalba)
+        rodomas pacios programos lange su slinktimi (SDF pamoka
+        2026-08-07: Notepad atsidarydavo tuscias - jokiu isoriniu
+        programu ir jokiu failu kopiju diske)."""
+        from PyQt6.QtWidgets import QDialog, QPlainTextEdit, QDialogButtonBox
+        from kalba import LANG
+        vardas = "README.txt" if LANG == "lt" else "README-en.txt"
+        try:
+            tekstas = Path(_resource_path(vardas)).read_text(
+                encoding="utf-8", errors="replace")
+        except OSError as e:
+            QMessageBox.warning(
+                self, t("Pagalba"), t("Nepavyko atidaryti: {}").format(e))
+            return
+        dlg = QDialog(self)
+        dlg.setWindowTitle(t("Instrukcija"))
+        lay = QVBoxLayout(dlg)
+        rodinys = QPlainTextEdit(tekstas)
+        rodinys.setReadOnly(True)
+        # Monospace - kad README ASCII antrastes lygiuotusi
+        rodinys.setFont(QFont("Consolas", 10))
+        lay.addWidget(rodinys)
+        mygtukai = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        mygtukai.rejected.connect(dlg.reject)
+        lay.addWidget(mygtukai)
+        dlg.resize(780, 560)
+        dlg.exec()
 
     def _perleisti_programa(self):
         """Paleidzia nauja programos kopija ir uzdaro sia (kalbos keitimui).
@@ -750,6 +898,51 @@ class MainWindow(QMainWindow):
         path_item = self.table.item(row, 0)
         if path_item:
             folder = path_item.text()
+            os.startfile(folder)
+
+    def _on_context_menu(self, pos):
+        """v1.1 desinio klaviso meniu: Kas tai? / Kopijuoti kelia / Atverti.
+
+        "Kas tai?" (Roberto ideja 2026-08-07): zinomai programai atidaromas
+        GAMINTOJO puslapis is zinomos_programos.json, nezinomai - Google
+        paieskos sarasas. I uzklausa eina TIK programos vardas (zinynas.py
+        privatumo garantija - be pilno kelio ir be vartotojo vardo).
+        """
+        row = self.table.rowAt(pos.y())
+        if row < 0:
+            return
+        path_item = self.table.item(row, 0)
+        if path_item is None or not path_item.text():
+            return
+        folder = path_item.text()
+        from PyQt6.QtWidgets import QMenu
+        from PyQt6.QtGui import QAction
+        import zinynas
+        import kalba
+        menu = QMenu(self)
+        vardas = zinynas.vardas_is_kelio(folder)
+        act_kas = QAction(
+            t("Kas tai? ({})").format(vardas) if vardas else t("Kas tai?"),
+            self)
+        act_kas.setEnabled(vardas is not None)
+        act_copy = QAction(t("Kopijuoti kelia"), self)
+        act_open = QAction(t("Atverti aplanka"), self)
+        menu.addAction(act_kas)
+        menu.addSeparator()
+        menu.addAction(act_copy)
+        menu.addAction(act_open)
+        chosen = menu.exec(self.table.viewport().mapToGlobal(pos))
+        if chosen is act_kas:
+            v, url, is_zin = zinynas.atidaryti_kas_tai(folder, kalba.LANG)
+            if url:
+                self._log(
+                    t("Kas tai '{}': atidaryta gamintojo svetaine").format(v)
+                    if is_zin else
+                    t("Kas tai '{}': atidaryta Google paieska").format(v))
+        elif chosen is act_copy:
+            QApplication.clipboard().setText(folder)
+            self.lbl_status.setText(t("Kelias nukopijuotas"))
+        elif chosen is act_open:
             os.startfile(folder)
 
     def _log(self, message):

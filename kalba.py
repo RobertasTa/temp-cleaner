@@ -115,6 +115,16 @@ _EN = {
     "Surasta {} vietu | Is viso: {:.2f} MB":
         "Found {} locations | Total: {:.2f} MB",
     "Skenuojama: rasta {} vietu...": "Scanning: {} locations found...",
+    # v1.1 "Kas tai?" desinio klaviso meniu
+    "Kas tai? ({})": "What is this? ({})",
+    "Kas tai?": "What is this?",
+    "Kopijuoti kelia": "Copy path",
+    "Atverti aplanka": "Open folder",
+    "Kas tai '{}': atidaryta gamintojo svetaine":
+        "What is '{}': opened the vendor's website",
+    "Kas tai '{}': atidaryta Google paieska":
+        "What is '{}': opened a Google search",
+    "Kelias nukopijuotas": "Path copied",
     # handlers: dialogai ir statusai
     "Patvirtinimas": "Confirmation",
     "Valyti visas ZALIAS vietas?": "Clean all GREEN locations?",
@@ -156,6 +166,56 @@ _EN = {
         "Would delete {} files ({:.2f} MB) with a {} d. age limit.\nNOTHING was deleted - this is only a preview.",
     "ZALIOS vietos: {} failu ({:.2f} MB) - tiek istrins mygtukas 'Valyti viska is zaliu vietu'.\nGELTONOS vietos: {} failu ({:.2f} MB) - valomos tik po viena, su patvirtinimu.\nAmziaus riba: {} d.\nNIEKAS neistrinta - tai tik perziura.":
         "GREEN locations: {} files ({:.2f} MB) - this is what 'Clean all GREEN locations' will delete.\nYELLOW locations: {} files ({:.2f} MB) - cleaned one by one, with confirmation.\nAge limit: {} d.\nNOTHING was deleted - this is only a preview.",
+    # pagalbos "?" kampelis (2026-08-07, Roberto ideja, seimos taisykle:
+    # winget/Store vartotojas readme negauna - instrukcija pacioje programoje)
+    "Pagalba": "Help",
+    "Apie...": "About...",
+    "Instrukcija": "User guide",
+    # "Klausk DI" (Roberto ideja 2026-08-08; sertifikuotas receptas is
+    # SDF/FOTO namu - promptas anglu k. kodo konstanta, ne zodyno irasas)
+    "Neradote atsakymo? Klauskite DI": "No answer here? Ask the AI",
+    "Kas ivyks paspaudus OK:\n\n"
+    "1. Atsidarys interneto narsykle su DI padejejo\n"
+    "   claude.ai puslapiu. Zinutes laukelyje jau bus\n"
+    "   irasyta angliska pradzia - prisistatymas, kas per\n"
+    "   programa ir kur jos kodas.\n"
+    "2. NEISSIGASKITE raudono pranesimo virs zinutes -\n"
+    "   claude.ai ji rodo visada, kai tekstas ateina per\n"
+    "   nuoroda. Tai tik priminimas perskaityti, kas\n"
+    "   siunciama.\n"
+    "3. Zinutes gale, po zodziu \"My question:\", irasykite\n"
+    "   SAVO klausima - galima lietuviskai! - ir spauskite\n"
+    "   siuntimo mygtuka (rodykle). Klausti galima visko,\n"
+    "   pvz.: \"kaip atsinaujinti programa i naujesne\n"
+    "   versija? paaiskink zingsnis po zingsnio\".\n"
+    "4. Jei DI atsakys angliskai - tiesiog paprasykite kita\n"
+    "   zinute: \"atsakyk lietuviskai\", ir toliau bendraus\n"
+    "   lietuviskai.\n\n"
+    "Pastaba: claude.ai gali paprasyti prisijungti (nemokama\n"
+    "paskyra). Niekas neissiunciama be jusu rankos.":
+        "What happens after you press OK:\n\n"
+        "1. Your web browser opens the claude.ai AI assistant.\n"
+        "   The message box will already contain a prepared\n"
+        "   opening - what the program is and where its code is.\n"
+        "2. DO NOT be alarmed by the red notice above the\n"
+        "   message - claude.ai always shows it when text\n"
+        "   arrives via a link. It is just a reminder to read\n"
+        "   what you are sending.\n"
+        "3. At the end of the message, after \"My question:\",\n"
+        "   TYPE YOUR question - any language works! - and\n"
+        "   press the send button (the arrow). Ask anything,\n"
+        "   e.g.: \"how do I update the app to the newest\n"
+        "   version? explain it step by step\".\n"
+        "4. If the AI answers in the wrong language - just ask\n"
+        "   in the next message, e.g. \"answer in English\".\n\n"
+        "Note: claude.ai may ask you to sign in (a free account).\n"
+        "Nothing is sent without your hand.",
+    "Nepavyko atidaryti: {}": "Could not open: {}",
+    "Apie programa": "About",
+    "Saugus sisteminiu laikinu failu valymas - viska matai ir supranti.":
+        "Safe system temp cleanup - you see and understand everything.",
+    "Versija {v}": "Version {v}",
+    "Kurejo puslapis:": "Project page:",
 }
 
 # Spalvu zymos: vidiniai raktai VISADA lietuviski (ZALIA/GELTONA/RAUDONA),
