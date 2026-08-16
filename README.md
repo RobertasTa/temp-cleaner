@@ -61,6 +61,14 @@ No other cleaner we tried explains itself like that.
 
   ![After cleaning: honest counters and per-location log](docs/screenshots/cleaned-focus.png)
 
+- **"What is this?" context menu** — right-click any scanned location:
+  known programs open the vendor's official page (offline curated
+  knowledge base, 66 entries), unknown ones open a Google search.
+  Only the program name is ever sent — never your paths or username.
+  Plus quick "Copy path" and "Open folder" actions.
+
+  ![What is this? context menu](docs/screenshots/kas-tai-meniu.png)
+
 - **Deletes only files, never folder structure; never follows junctions or
   symlinks** — a link pointing at your real data is skipped and logged.
 - **Full audit trail** — every run appends to `valymo_log.txt`: what was
@@ -120,11 +128,18 @@ Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.tx
 | Ads / bundled offers | ❌ | ❌ | ⚠️ | — |
 | Portable single exe | ✅ | ✅ | partial | — |
 | Cleans Windows system areas (Recycle Bin, Update leftovers) | ❌ by design | ✅ | ✅ | ✅ |
-| Sees third-party app caches (browsers, Electron, package managers) | ✅ 440 locations found | partial (fixed list) | partial (fixed list) | ❌ |
+| Sees third-party app caches (browsers, Electron, package managers) | ✅ 440 locations found (dev machine) | partial (fixed list) | partial (fixed list) | ❌ |
+| "What is this?" — explains programs it finds (vendor page / search) | ✅ 66-entry offline KB | ❌ | ❌ | ❌ |
 
 BleachBit is a fine tool with many more cleaners; CCleaner is the famous one.
 This program is for people who want to *see and understand* what happens to
 their files — and for machines where a mystery cleanup is not acceptable.
+
+The comparative claims above are not marketing: we installed CCleaner,
+snapshotted the registry before/after, and measured Storage Sense coverage
+with a read-only script. Full reproducible protocol — including the points
+where **they** win (speed, system areas) — in
+[docs/COMPARISON_TEST.md](docs/COMPARISON_TEST.md).
 
 ## Run from source / build
 
@@ -143,13 +158,16 @@ Requires Python 3.13+ and PyQt6 (see [requirements.txt](requirements.txt)).
 The safety guarantees are covered by a regression suite in [`tests/`](tests/):
 `patikra_saugikliai.py` (45+ engine checks — AGE / LOCKED / JUNCTION traps with
 artificial files, a real `mklink /J` junction, colour classification, the
-portable-mode round-trip) and `patikra_gui_flow.py` (30 GUI-contract checks —
-scan flow, instant preview vs live dry-run cross-check, slider recalculation).
+portable-mode round-trip), `patikra_gui_flow.py` (30 GUI-contract checks —
+scan flow, instant preview vs live dry-run cross-check, slider recalculation)
+and `patikra_zinynas.py` (31 checks for the "What is this?" module — name
+extraction, privacy guarantees, knowledge-base integrity).
 Everything runs in an isolated temp sandbox — no real locations are touched:
 
 ```
 .venv\Scripts\python -u tests\patikra_saugikliai.py
 .venv\Scripts\python -u tests\patikra_gui_flow.py
+.venv\Scripts\python -u tests\patikra_zinynas.py
 ```
 
 ## Architecture
@@ -164,7 +182,9 @@ Everything runs in an isolated temp sandbox — no real locations are touched:
 | `worker.py` | QThread workers (scan / preview / clean) |
 | `saugykla.py` | Working-file storage: `%LOCALAPPDATA%` vs portable mode |
 | `kalba.py` | LT/EN i18n layer |
+| `zinynas.py` | "What is this?" engine: name extraction, vendor lookup, privacy guard (zero Qt) |
 | `vietos.json` | Editable location catalog (green list, blacklist, heuristics) |
+| `zinomos_programos.json` | "What is this?" offline knowledge base (66 curated vendor entries) |
 
 ## Questions? The author is an AI — ask it directly
 

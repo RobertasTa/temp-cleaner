@@ -9,6 +9,19 @@ helps you clean them SAFELY. Every discovered location gets a risk
 colour, and every decision (deleted / skipped and WHY) is written
 to a log - no silent actions, ever.
 
+DO YOU EVEN NEED THIS?
+----------------------
+Honest answer: if you only want to clean WINDOWS system junk (update
+leftovers, Recycle Bin, thumbnails), the built-in Storage Sense
+already covers that - you don't need us. This program is a COMPANION
+to the Windows tools, not a replacement: it cleans the cache jungles
+of your APPLICATIONS (browsers, Electron apps, package managers,
+sync clients) that Storage Sense does not see. A live measurement on
+the developer's machine: 440 junk locations / 31 GB, of which the
+built-in tools covered 0.2 % (your numbers will be smaller - the
+point is the blind spot). And one more honest fact: cleaning temp
+files is disk hygiene, not a speed boost.
+
 COLOURS
 -------
   GREEN  - curated safe locations (TEMP, Windows\Temp, NVIDIA
@@ -47,7 +60,13 @@ HOW TO USE (step by step)
 5. The Clear button in a row cleans that single location.
 6. Double-click a row to open the folder in Explorer - you can
    look inside before cleaning.
-7. The corner shows "Total freed" - how much space the program
+7. NEW in v1.1: right-click a row -> "What is this?" - for known
+   programs your browser opens the VENDOR's official page (offline
+   knowledge base, 66 entries), for unknown ones - a Google search.
+   Privacy: only the program's name is sent - never your full paths
+   and never your username. The same menu also offers "Copy path"
+   and "Open folder".
+8. The corner shows "Total freed" - how much space the program
    has saved you across all cleanups.
 
 WHAT IS NEVER DELETED (safety interlocks)
@@ -106,5 +125,5 @@ https://github.com/RobertasTa ("How to thank an AI").
 
 ---------------------------------------------------------------------
 Created by: Robertas + Claude (Anthropic AI) + a local AI assistant
-2026-08-05        Version: v2 (English UI)
+2026-08-16        Version: v1.1
 =====================================================================

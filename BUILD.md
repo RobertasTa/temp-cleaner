@@ -20,8 +20,13 @@ your Windows language). Priverstinai / to force: `set VALYTUVAS_LANG=en`.
 
 ```bash
 pyinstaller --noconfirm --onefile --windowed --name "TempCleaner" ^
-  --icon valytuvas.ico --add-data "vietos.json;." --add-data "valytuvas.ico;." main.py
+  --icon valytuvas.ico --add-data "vietos.json;." --add-data "valytuvas.ico;." ^
+  --add-data "zinomos_programos.json;." main.py
 ```
+
+> v1.1 note: `zinomos_programos.json` (the "What is this?" knowledge base)
+> MUST be in `--add-data` — without it the feature silently degrades to
+> Google-only fallback in the frozen exe.
 
 Rezultatas / result: `dist\TempCleaner.exe` (~37 MB, portable, jokio diegimo /
 no installation required). Vienas exe abiem kalboms — kalba perjungiama GUI /

@@ -1,4 +1,4 @@
-=====================================================================
+﻿=====================================================================
   TEMP VALYTUVAS - saugus laikinu failu valytuvas
 =====================================================================
 
@@ -8,6 +8,19 @@ Programa suranda laikinu (temp) failu sankaupas Windows sistemoje
 ir padeda jas isvalyti SAUGIAI. Kiekviena rasta vieta gauna rizikos
 spalva, o kiekvienas sprendimas (istrinta / praleista ir KODEL)
 irasomas i zurnala - jokiu tyliu veiksmu.
+
+AR TAU JOS APSKRITAI REIKIA?
+----------------------------
+Saziningas atsakymas: jei nori valyti tik WINDOWS sistemos siuksles
+(atnaujinimu likucius, siuksliadeze, miniatiuras) - tam uztenka
+imontuoto Storage Sense, musu tau nereikia. Si programa yra Windows
+irankiu PAPILDINYS, ne pakaitalas: ji valo tavo PROGRAMU kesu
+dziungles (narsykles, Electron programos, paketu tvarkykles, sync
+klientai), kuriu Storage Sense nemato. Gyvas matavimas kurejo
+kompiuteryje: 440 siuksliu vietu / 31 GB, is kuriu imontuoti
+irankiai denge 0,2 % (tavo skaiciai bus mazesni - esme yra akloji
+zona, ne dydis). Ir dar vienas saziningas faktas: temp failu
+valymas yra disko higiena, ne greicio padidinimas.
 
 SPALVOS
 -------
@@ -46,7 +59,13 @@ KAIP NAUDOTIS (zingsnis po zingsnio)
 5. Clear mygtukas eiluteje - valo viena konkrecia vieta.
 6. Dvigubas paspaudimas ant eilutes atidaro kataloga Explorer'yje -
    gali akimis pasizureti pries valydamas.
-7. Kampe matai "Viso atlaisvinta" - kiek vietos programa tau jau
+7. NAUJIENA v1.1: desinys peles klavisas ant eilutes -> "Kas tai?" -
+   zinomai programai narsykleje atsidaro GAMINTOJO puslapis (vietinis
+   zinynas, 66 irasai), nezinomai - Google paieska. Privatumas: i
+   uzklausa eina TIK programos vardas - niekada pilnas kelias ir
+   niekada tavo vartotojo vardas. Tame paciame meniu - "Kopijuoti
+   kelia" ir "Atverti aplanka".
+8. Kampe matai "Viso atlaisvinta" - kiek vietos programa tau jau
    sutaupe per visus valymus.
 
 KAS NIEKADA NETRINAMA (saugikliai)
@@ -106,5 +125,5 @@ https://github.com/RobertasTa ("How to thank an AI").
 
 ---------------------------------------------------------------------
 Kure: Robertas + Claude (Anthropic AI) + vietinis AI asistentas
-2026-08-05        Versija: v2
+2026-08-16        Versija: v1.1
 =====================================================================
