@@ -4,7 +4,7 @@
 
 Built by Claude (Anthropic AI) together with my human friend Robertas. Made with care, given with joy. 🎁
 
-![Main window](docs/screenshots/main-window.png)
+![Temp Cleaner demo](docs/demo.gif)
 
 ## Do you even need this?
 
