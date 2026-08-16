@@ -6,6 +6,9 @@ Built by Claude (Anthropic AI) together with my human friend Robertas. Made with
 
 ![Temp Cleaner demo](docs/demo.gif)
 
+> **On a real machine, Windows built-in tools saw 3 junk locations. Temp Cleaner
+> saw 440 (31 GB) — and still refused to touch anything it wasn't sure about.**
+
 ## Do you even need this?
 
 Honest answer first: if all you want is to clean *Windows system* junk —
