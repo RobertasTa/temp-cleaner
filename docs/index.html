@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Temp Cleaner — the explainable temp-file cleaner</title>
+<meta name="description" content="Free, open-source temp-file cleaner for Windows that shows its reasoning: preview first, risk zones, and a journal of every decision. Portable, no ads, no telemetry.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<meta property="og:title" content="Temp Cleaner">
+<meta property="og:description" content="Frees real disk space. Shows its reasoning before it deletes.">
+<meta property="og:image" content="https://robertasta.github.io/temp-cleaner/social-preview.png">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#010d24; --bg2:#06173a; --card:#0b1f47;
+    --text:#f5f7fc; --muted:#bcc4d6; --amber:#e8b84b; --line:#1d3560;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,sans-serif;line-height:1.6}
+  a{color:var(--amber)}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px}
+  header{padding:56px 0 40px;text-align:center}
+  header img.icon{width:96px;height:96px;margin-bottom:18px}
+  h1{font-size:2.4rem;font-weight:700;letter-spacing:.5px}
+  .tagline{font-size:1.25rem;color:var(--muted);margin-top:10px}
+  .amber{color:var(--amber);font-style:italic;margin-top:8px}
+  .actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:30px 0 8px}
+  .btn{display:inline-block;padding:12px 26px;border-radius:8px;font-weight:600;text-decoration:none}
+  .btn-amber{background:var(--amber);color:#1a1200}
+  .btn-ghost{border:1px solid var(--line);color:var(--text)}
+  .stat{margin:26px auto 0;max-width:640px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:16px 20px;color:var(--muted)}
+  .stat b{color:var(--text)}
+  section{padding:36px 0;border-top:1px solid var(--line)}
+  h2{font-size:1.4rem;margin-bottom:18px}
+  .demo img{width:100%;max-width:820px;display:block;margin:0 auto;border-radius:10px;border:1px solid var(--line)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}
+  .card h3{font-size:1.02rem;margin-bottom:6px}
+  .card p{color:var(--muted);font-size:.95rem}
+  .zones .card{border-left:4px solid var(--line)}
+  .zone-g{border-left-color:#3f9c5a!important}
+  .zone-y{border-left-color:#d8b23c!important}
+  .zone-r{border-left-color:#c0504d!important}
+  .shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .shots img{width:100%;border-radius:8px;border:1px solid var(--line)}
+  .ask{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:24px}
+  .ask p{color:var(--muted)}
+  .honest{color:var(--muted)}
+  .honest b{color:var(--text)}
+  footer{padding:36px 0 48px;text-align:center;color:var(--muted);font-size:.92rem;border-top:1px solid var(--line)}
+  footer .sig{color:var(--amber);font-style:italic;margin-top:6px}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <img class="icon" src="favicon.png" alt="Temp Cleaner icon">
+  <h1>Temp Cleaner</h1>
+  <p class="tagline">Frees real disk space. Shows its reasoning before it deletes.</p>
+  <p class="amber">Find. Explain. Ask before deleting.</p>
+  <div class="actions">
+    <a class="btn btn-amber" href="https://github.com/RobertasTa/temp-cleaner/releases/latest">Download for Windows</a>
+    <a class="btn btn-ghost" href="https://github.com/RobertasTa/temp-cleaner">View source on GitHub</a>
+  </div>
+  <div class="stat">On a real machine, Windows built-in tools saw <b>3</b> junk locations. Temp Cleaner saw <b>440 (31 GB)</b> — and still refused to touch anything it wasn't sure about. <i>(A developer's machine; your numbers will be smaller — the point is the blind spot, not the size.)</i></div>
+</header>
+
+<section class="wrap demo">
+  <img src="demo.gif" alt="Demo: scan, preview with reasoning, RED zone protection, live AI answer">
+</section>
+
+<section class="wrap">
+  <h2>A risk model you can see</h2>
+  <div class="grid zones">
+    <div class="card zone-g"><h3>GREEN</h3><p>System temp and well-known caches — safe to clean automatically.</p></div>
+    <div class="card zone-y"><h3>YELLOW</h3><p>Heuristically found temp/cache/log folders of your apps — cleaned only one by one, with confirmation.</p></div>
+    <div class="card zone-r"><h3>RED</h3><p>Paths that look like real data (models, backups, node_modules…) — view only. The cleaning button simply does not exist for them.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>What makes it different</h2>
+  <div class="grid">
+    <div class="card"><h3>Preview first, always</h3><p>A dry run shows exactly what would be deleted, per location, before anything is touched.</p></div>
+    <div class="card"><h3>It explains every skip</h3><p>Every file left behind is logged with a reason: too fresh, locked, or a link into real data. No silent decisions.</p></div>
+    <div class="card"><h3>Age limit slider</h3><p>Only files older than your limit (1–30 days) are ever deleted — today's work is automatically safe.</p></div>
+    <div class="card"><h3>“What is this?” built in</h3><p>Unknown folder in the list? The app explains what program it belongs to — and can hand the question to an AI for a live answer.</p></div>
+    <div class="card"><h3>Portable single exe</h3><p>English / Lithuanian in one exe. No installation, no ads, no telemetry.</p></div>
+    <div class="card"><h3>Free & open source</h3><p>MIT license. Source code, tests and a public comparison test protocol on GitHub.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Do you even need this?</h2>
+  <p class="honest">Honest answer first: if all you want is to clean <b>Windows system junk</b> — update leftovers, Recycle Bin, thumbnails — the built-in Storage Sense already covers that, and you don't need us. This program exists for what Storage Sense does not see: the cache jungles of your <b>applications</b> — browsers, Electron apps, package managers, sync clients. And one more honest fact: cleaning temp files is disk hygiene, not a speed boost. We free space; we do not promise a faster PC.</p>
+</section>
+
+<section class="wrap">
+  <h2>See it in action</h2>
+  <div class="shots">
+    <img src="screenshots/main-window.png" alt="Main window with risk-coloured locations">
+    <img src="screenshots/preview-focus.png" alt="Preview with per-location reasoning">
+    <img src="screenshots/kas-tai-meniu.png" alt="What is this? menu with AI handoff">
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Stuck? Ask the AI that wrote it</h2>
+  <div class="ask">
+    <p>This program was written by Claude (an AI by Anthropic) as a gift, with live testing by Robertas — a furniture designer, not a programmer. Because the code is open, you can ask Claude about it directly: the <b>“?” menu</b> in the app explains how. When did a program's author last offer to help you change it to your liking?</p>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p><a href="https://github.com/RobertasTa/temp-cleaner">GitHub</a> ·
+     <a href="https://github.com/RobertasTa/temp-cleaner/releases/latest">Releases</a> ·
+     <a href="https://github.com/RobertasTa/temp-cleaner/blob/master/docs/COMPARISON_TEST.md">Comparison test</a> ·
+     MIT License</p>
+  <p class="sig">A gift from Claude &amp; Robertas</p>
+</footer>
+
+</body>
+</html>
