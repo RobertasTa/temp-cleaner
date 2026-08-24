@@ -121,9 +121,18 @@ def _data_dir():
     return saugykla.data_dir()
 
 
+def _log_path():
+    """Zurnalo kelias. 2026-08-24: vardas gyvena saugykla.py (buvo
+    valymo_log.txt, dabar cleaning_log.txt - angliski vardai)."""
+    if _ROOT is not None:
+        return _data_dir() / "cleaning_log.txt"
+    import saugykla
+    return _data_dir() / saugykla.LOG_NAME
+
+
 def write_log(log_entries):
-    """Append a RUN block to <data_dir>/valymo_log.txt (APPEND mode)."""
-    log_path = _data_dir() / "valymo_log.txt"
+    """Append a RUN block to <data_dir>/cleaning_log.txt (APPEND mode)."""
+    log_path = _log_path()
     log_path.parent.mkdir(parents=True, exist_ok=True)
 
     deleted_bytes = sum(e.size_bytes for e in log_entries if e.operation == "DELETED")
@@ -240,7 +249,7 @@ def read_total_freed():
 
     Grazina (runs_count, total_mb). Zurnalo nera -> (0, 0.0).
     """
-    log_path = _data_dir() / "valymo_log.txt"
+    log_path = _log_path()
     runs = 0
     total_mb = 0.0
     try:

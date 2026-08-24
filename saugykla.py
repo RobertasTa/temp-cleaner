@@ -36,15 +36,26 @@ _LOG_NAME = "valymo_log.txt"
 #   2) BLOGIAU: set_portable() perkeldavo VISUS is _darbal rastus failus i
 #      savo %LOCALAPPDATA% kataloga - t. y. SDF issivesdavo musu valymo
 #      zurnala (o jis yra AUDITAS, ka programa trine), arba mes - jo kesa.
-# Sprendimas: portable duomenys gyvena PO-KATALOGE pagal programos varda -
-# lygiai kaip %LOCALAPPDATA%\\TempCleaner. Struktura abiem rezimam vienoda.
-DARBAL_DIRNAME = "_darbal"
+# Sprendimas: portable duomenys gyvena atskirame, PROGRAMOS VARDU PASIRASYTAME
+# kataloge salia exe. Bendro tevo nebera is viso, tad susimaisyti nebeturi su
+# kuo - nei su seserine dovana, nei su svetima programa flesiuke.
+#
+# --- VARDAI ANGLISKAI (Roberto klausimas 2026-08-24) ---------------------
+# "tuos failiukus lietuviu kalba tik meskai supras, kitom kalbom kaip bus?"
+# Rizika konkreti: flesiuko saknyje gulejo "_darbal" - kitakalbis jo
+# nesupranta ir gali istrinti kaip siuksle. Failu vardai NIEKADA nesikeicia
+# pagal sasajos kalba - jie tiesiog tampa tarptautiskai skaitomi. Kirilicos
+# ar diakritiku varduose NENAUDOJAM NIEKADA (FAT32 + svetima koduote).
+DATA_DIRNAME = "TempCleaner_data"          # portable duomenys salia exe
 
-# Musu darbiniai failai (migracijai is seno bendro _darbal).
-# "kalba.txt" TYCIA cia nera - jis bendravardis su SDF, todel migruojamas
-# KOPIJUOJANT: abi programos pasiima po kopija ir viena kitos nebeliecia.
-_SAVI_FAILAI = (_LOG_NAME,)
+SENAS_DARBAL = "_darbal"                   # iki 2026-08-24: bendras su SDF
+SENAS_PO_KATALOGIS = APP_DIRNAME           # tarpine forma: _darbal/TempCleaner
+
+LOG_NAME = "cleaning_log.txt"              # buvo valymo_log.txt
+_VARDAI = {_LOG_NAME: LOG_NAME}
 _BENDRAVARDIS = "kalba.txt"
+BENDRAVARDIS_NAUJAS = "language.txt"
+KALBOS_FAILAS = BENDRAVARDIS_NAUJAS
 _migruota = False   # migracija vykdoma viena karta per procesa
 
 
@@ -60,54 +71,104 @@ def is_portable():
     return (d / PORTABLE_MARKER).exists() or (d / PORTABLE_MARKER_OLD).exists()
 
 
-def _senas_darbal():
-    """Iki-2026-08-24 bendra vieta, kuria dalinomes su Duplicate Finder."""
-    return exe_dir() / DARBAL_DIRNAME
-
-
 def data_dir():
     """Darbiniu failu katalogas pagal rezima (nekuriamas - kuria rasytojai)."""
     if is_portable():
-        return exe_dir() / DARBAL_DIRNAME / APP_DIRNAME
+        return exe_dir() / DATA_DIRNAME
     base = os.environ.get("LOCALAPPDATA")
     if base:
         return Path(base) / APP_DIRNAME
-    # atsarga sistemoms be LOCALAPPDATA - ta pati po-katalogo struktura
-    return exe_dir() / DARBAL_DIRNAME / APP_DIRNAME
+    return exe_dir() / DATA_DIRNAME   # atsarga sistemoms be LOCALAPPDATA
+
+
+def _senos_vietos():
+    """Kur duomenys galejo guleti iki 2026-08-24 (portable rezime)."""
+    if not is_portable():
+        return []
+    d = exe_dir()
+    return [d / SENAS_DARBAL / SENAS_PO_KATALOGIS, d / SENAS_DARBAL]
+
+
+def _perkelk(senas_kat, naujas_kat, musu_katalogas):
+    """Perkelia musu failus is senos vietos i nauja, kartu pervadindamas.
+    Bendrame kataloge bendravardis KOPIJUOJAMAS (ji dar turi rasti SDF)."""
+    perkelta = 0
+    for senas_v, naujas_v in _VARDAI.items():
+        f = senas_kat / senas_v
+        if f.is_file() and not (naujas_kat / naujas_v).exists():
+            naujas_kat.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(f), str(naujas_kat / naujas_v))
+            perkelta += 1
+    for vardas in (_BENDRAVARDIS, BENDRAVARDIS_NAUJAS):
+        k = senas_kat / vardas
+        if k.is_file() and not (naujas_kat / BENDRAVARDIS_NAUJAS).exists():
+            naujas_kat.mkdir(parents=True, exist_ok=True)
+            if musu_katalogas:
+                shutil.move(str(k), str(naujas_kat / BENDRAVARDIS_NAUJAS))
+            else:
+                shutil.copy2(str(k), str(naujas_kat / BENDRAVARDIS_NAUJAS))
+            perkelta += 1
+    return perkelta
+
+
+def _pervadink_vietoje(katalogas):
+    """Naujoje vietoje dar gali guleti seni vardai (%LOCALAPPDATA% atvejis:
+    katalogas nesikeicia, keiciasi tik failu vardai)."""
+    if not katalogas.is_dir():
+        return 0
+    pervadinta = 0
+    pora = list(_VARDAI.items()) + [(_BENDRAVARDIS, BENDRAVARDIS_NAUJAS)]
+    for senas_v, naujas_v in pora:
+        if senas_v == naujas_v:
+            continue
+        f = katalogas / senas_v
+        if f.is_file() and not (katalogas / naujas_v).exists():
+            shutil.move(str(f), str(katalogas / naujas_v))
+            pervadinta += 1
+    return pervadinta
 
 
 def migruoti_sena_darbal():
-    """Vienkartinis perkelimas is bendro _darbal i _darbal/TempCleaner.
+    """Vienkartinis perejimas i nauja vieta IR naujus (angliskus) vardus.
 
     Kvieciama paleidziant programa. Saugi bet kokioje busenoje:
-    - jei seno katalogo nera arba jis jau musiskis - nedaro nieko;
-    - SAVO valymo zurnala PERKELIA, bendravardi kalba.txt KOPIJUOJA;
+    - senos vietos nera arba ji jau musiske - praleidziama;
+    - SAVO failus PERKELIA, bendravardi is BENDRO katalogo KOPIJUOJA;
     - svetimu failu NELIECIA;
     - klaida (read-only flesiukas) nutylima: programa turi startuoti.
-
-    Grazina perkeltu failu skaiciu (0 - nebuvo ko).
     """
     global _migruota
     if _migruota:
         return 0
     _migruota = True
-    senas = _senas_darbal()
     naujas = data_dir()
-    if senas == naujas or not senas.is_dir():
-        return 0
     perkelta = 0
     try:
-        for vardas in _SAVI_FAILAI:
-            f = senas / vardas
-            if f.is_file() and not (naujas / vardas).exists():
-                naujas.mkdir(parents=True, exist_ok=True)
-                shutil.move(str(f), str(naujas / vardas))
-                perkelta += 1
-        k = senas / _BENDRAVARDIS
-        if k.is_file() and not (naujas / _BENDRAVARDIS).exists():
-            naujas.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(str(k), str(naujas / _BENDRAVARDIS))
-            perkelta += 1
+        for i, senas in enumerate(_senos_vietos()):
+            if senas == naujas or not senas.is_dir():
+                continue
+            perkelta += _perkelk(senas, naujas, musu_katalogas=(i == 0))
+            if i == 0:
+                try:
+                    senas.rmdir()
+                except OSError:
+                    pass
+        perkelta += _pervadink_vietoje(naujas)
+        # Paskutinis iseinantis uzgesina sviesa: bendravardis kalba.txt
+        # KOPIJUOJAMAS (kad kaimynas ji dar rastu), todel pats senas _darbal
+        # niekada neistustetu ir liktu flesiuke amzinai - o butent to
+        # nesuprantamo katalogo ir atsikratom. Todel: jei _darbal beturi TIK
+        # ta viena bendravardi, vadinasi visi savo jau pasieme.
+        if is_portable():
+            senas_bendras = exe_dir() / SENAS_DARBAL
+            try:
+                if senas_bendras.is_dir():
+                    likutis = [f.name for f in senas_bendras.iterdir()]
+                    if likutis == [_BENDRAVARDIS]:
+                        (senas_bendras / _BENDRAVARDIS).unlink()
+                senas_bendras.rmdir()   # tik jei tuscias
+            except OSError:
+                pass
     except OSError:
         pass
     return perkelta
@@ -126,7 +187,7 @@ def set_portable(on):
     marker = exe_dir() / PORTABLE_MARKER
     marker_old = exe_dir() / PORTABLE_MARKER_OLD
     try:
-        src = data_dir() / _LOG_NAME          # dabartine vieta (senas rezimas)
+        src = data_dir() / LOG_NAME          # dabartine vieta (senas rezimas)
         if on:
             marker.write_text("portable\n", encoding="utf-8")
             if marker_old.exists():
@@ -152,11 +213,7 @@ def set_portable(on):
             # tik tuomet, jei jame nebeliko nieko - ten gali gyventi kitos
             # dovanos duomenys (Roberto radinys 2026-08-24).
             try:
-                (exe_dir() / DARBAL_DIRNAME / APP_DIRNAME).rmdir()
-            except OSError:
-                pass
-            try:
-                (exe_dir() / DARBAL_DIRNAME).rmdir()
+                (exe_dir() / DATA_DIRNAME).rmdir()   # tik jei tuscias
             except OSError:
                 pass   # netuscias ar nera - paliekam
         return True, ""

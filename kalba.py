@@ -29,7 +29,7 @@ def _issaugota_kalba():
         # 2026-08-24: kalba gali dar guleti sename bendrame _darbal -
         # persikeliam PIRMA, kitaip pirmas paleidimas grizdavo i numatyta
         saugykla.migruoti_sena_darbal()
-        v = (saugykla.data_dir() / "kalba.txt").read_text(
+        v = (saugykla.data_dir() / saugykla.KALBOS_FAILAS).read_text(
             encoding="utf-8").strip().lower()
         return v if v in ("lt", "en") else None
     except OSError:
@@ -42,7 +42,7 @@ def issaugoti_kalba(lang):
     import saugykla
     d = saugykla.data_dir()
     d.mkdir(parents=True, exist_ok=True)
-    (d / "kalba.txt").write_text(lang + "\n", encoding="utf-8")
+    (d / saugykla.KALBOS_FAILAS).write_text(lang + "\n", encoding="utf-8")
 
 
 def _os_kalba():
