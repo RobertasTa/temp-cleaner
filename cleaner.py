@@ -115,6 +115,9 @@ def _data_dir():
     if _ROOT is not None:
         return Path(_ROOT) / "_darbal"
     import saugykla
+    # 2026-08-24: vienkartinis perkelimas is bendro _darbal (vieta, kuria
+    # flesiuke dalinomes su Duplicate Finder) - zr. saugykla.py
+    saugykla.migruoti_sena_darbal()
     return saugykla.data_dir()
 
 
