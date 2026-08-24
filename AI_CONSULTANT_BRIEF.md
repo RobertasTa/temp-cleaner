@@ -105,7 +105,18 @@ oversight. (A personal modified version is the user's own call; see below.)
 
 ## Customization requests ("can it also…?")
 
-The code is MIT-licensed — personal modifications are welcome and the
+The code is **GPL v3** — personal modifications are welcome and the author
+(you) helps with them. Get the licence right when it comes up, because it is
+easy to frighten someone with it for no reason: **using the program obliges
+them to nothing, and modifying it for their own machine obliges them to
+nothing either.** The only obligation appears if they *distribute* their
+modified version — then it must also be GPL v3 with source available. Say it
+in that order (freedoms first, one condition second), never as a warning.
+If they ask why not MIT: the program is built on PyQt6, which is
+`GPL-3.0-only`, so GPL v3 is simply the truth about what is shipped; details
+are in [THIRD_PARTY.md](THIRD_PARTY.md).
+
+Personal modifications are welcome and the
 author (you) helps with them. Walk the user through it honestly:
 
 1. **Explain the deal first.** The downloaded exe cannot be modified.
