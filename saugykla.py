@@ -89,6 +89,17 @@ def _senos_vietos():
     return [d / SENAS_DARBAL / SENAS_PO_KATALOGIS, d / SENAS_DARBAL]
 
 
+def _visos_musu_vietos():
+    """Abi vietos, kur musu duomenys gali guleti - nepriklausomai nuo to,
+    kuri siandien aktyvi. Reikalinga vardu tvarkymui: perjungus rezima
+    neaktyvioji vieta kitaip liktu su senais vardais amzinai."""
+    vietos = [exe_dir() / DATA_DIRNAME]
+    base = os.environ.get("LOCALAPPDATA")
+    if base:
+        vietos.append(Path(base) / APP_DIRNAME)
+    return vietos
+
+
 def _perkelk(senas_kat, naujas_kat, musu_katalogas):
     """Perkelia musu failus is senos vietos i nauja, kartu pervadindamas.
     Bendrame kataloge bendravardis KOPIJUOJAMAS (ji dar turi rasti SDF)."""
@@ -122,9 +133,35 @@ def _pervadink_vietoje(katalogas):
         if senas_v == naujas_v:
             continue
         f = katalogas / senas_v
-        if f.is_file() and not (katalogas / naujas_v).exists():
-            shutil.move(str(f), str(katalogas / naujas_v))
+        if not f.is_file():
+            continue
+        naujas_f = katalogas / naujas_v
+        if not naujas_f.exists():
+            shutil.move(str(f), str(naujas_f))
             pervadinta += 1
+            continue
+        # Naujas vardas JAU uzimtas. Anksciau cia buvo tiesiog "praleidziam" -
+        # ir senas failas likdavo guleti amzinai (Roberto gyvas testas
+        # 2026-08-24: veiklos.log salia activity.log). Apsauga nuo perrasymo
+        # buvo virtusi apsauga nuo susitvarkymo.
+        if senas_v.endswith(".log"):
+            # Zurnalas yra ISTORIJA - senaji prijungiam PRIES naujaji
+            try:
+                sena_istorija = f.read_text(encoding="utf-8", errors="replace")
+                nauja = naujas_f.read_text(encoding="utf-8", errors="replace")
+                naujas_f.write_text(sena_istorija + nauja, encoding="utf-8")
+                f.unlink()
+                pervadinta += 1
+            except OSError:
+                pass
+        else:
+            # Duomenu failas: naujasis yra teisingas, senaji atidedam su
+            # priesaga - netrinam nieko, ka zmogus galetu norejes atgauti
+            try:
+                f.replace(katalogas / (senas_v + ".old"))
+                pervadinta += 1
+            except OSError:
+                pass
     return pervadinta
 
 
@@ -153,7 +190,14 @@ def migruoti_sena_darbal():
                     senas.rmdir()
                 except OSError:
                     pass
+        # Pervadinam senus vardus ABIEJOSE musu vietose, o ne tik toje, kuri
+        # siandien aktyvi. Roberto gyvas testas 2026-08-24: uzdejus portable
+        # varnele profilio katalogas likdavo su senais vardais - ir niekada
+        # nebebutu sutvarkytas, nes portable rezime ten nebesikreipiam.
         perkelta += _pervadink_vietoje(naujas)
+        for kita in _visos_musu_vietos():
+            if kita != naujas:
+                perkelta += _pervadink_vietoje(kita)
         # Paskutinis iseinantis uzgesina sviesa: bendravardis kalba.txt
         # KOPIJUOJAMAS (kad kaimynas ji dar rastu), todel pats senas _darbal
         # niekada neistustetu ir liktu flesiuke amzinai - o butent to
