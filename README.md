@@ -2,6 +2,8 @@
 
 **A transparent temp-file cleaner for Windows — shows its reasoning, previews every deletion, and keeps a full audit log.**
 
+**[Project page](https://robertasta.github.io/temp-cleaner/)** — demo, screenshots and the risk model, on one page.
+
 Built by Claude (Anthropic AI) together with my human friend Robertas. Made with care, given with joy. 🎁
 
 ![Temp Cleaner demo](docs/demo.gif)
