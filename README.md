@@ -197,6 +197,17 @@ rules **not found**, Sigma rules **not found**, dropped files **not found**, and
 program never talks to the internet; that line is somebody else's machine
 confirming it, with no reason to do us any favours.
 
+One caveat, so you are not misled by a *good* result either: the sandbox is a
+whole Windows machine, and Windows chats to Microsoft on its own, so on other
+files that tab can show a stray DNS lookup that belongs to the test machine
+rather than to the program. (Our sibling gift PHOTO home has exactly such a
+line, and we say so on its page instead of quoting only the clean one.) **The
+check that depends on nobody's sandbox is the source.** This program imports no
+networking library at all — no `socket`, no `requests`, no `urllib.request`, no
+`aiohttp`. Search this repository for those words: you will find `urllib.parse`
+used to percent-encode text, and `webbrowser.open`, which hands a link to *your*
+browser when *you* press the "Ask AI" button. That is the whole of it.
+
 One more thing you can see there yourself, under **DETAILS → History**: *First
 submission — 2026-08-30*. That is the day we asked for this scan. Nobody had
 ever submitted this file before, which is exactly the "nobody knows it yet"
