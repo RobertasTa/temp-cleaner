@@ -142,9 +142,17 @@ just ours. It is probably the most useful 30 seconds you can spend before
 opening something new that came off the internet. If this gift teaches you only
 that, it has already paid for itself.
 
-**If you see a red mark — why it is not a reason to be afraid.** Programs like
-this one sometimes collect one or two red marks. You see red and your stomach
-drops, so here is what is actually happening.
+**What our own scan showed, in full.** Scanned 2026-08-30:
+**[3 engines out of 71](https://www.virustotal.com/gui/file/14c3cd21943c2b0101b5942bcb3e1864c8948419672fc3a4c12f2cef63df12ec)**
+flagged `TempCleaner.exe` — Bkav Pro (`W32.Malware.46CD7D19`), Zillya
+(`Trojan.Disco.Win32.15740`) and SecureAge (which says only the word
+`Malicious`, with no name at all). The other 68 — Avast, Avira, BitDefender,
+ClamAV, TrendMicro, Trellix, Webroot, VIPRE, WithSecure, Yandex, ZoneAlarm and
+the rest — reported it clean. We publish the ugly number rather than a
+comfortable one, because you would find it in 30 seconds anyway.
+
+**If you see a red mark — why it is not a reason to be afraid.** You see red
+and your stomach drops, so here is what is actually happening.
 
 Look at *what* such an engine says. Not "this program steals your files", not
 "this program deletes your documents" — but a vague label like `Wacatac.C!ml`
@@ -171,9 +179,28 @@ specific, concrete threat instead of a machine's vague guess. If you ever see
 that on our file, do not run it — tell us, and we will want to know more than
 you do.
 
-We have not published our own scan figure for this version, so the number you
-get from step 1 is the current, honest answer — ours would only be an older
-copy of it.
+**"But two of them gave it a *name* — `Trojan.Disco`!"** A fair objection, and
+it deserves a straight answer instead of a soothing one. Those names are filing
+labels, not identifications: an engine that decides a file looks suspicious has
+to put it in *some* drawer, so it picks the nearest family in its list. Notice
+what is around them — 68 engines, including every large vendor you would
+recognise, found nothing to file at all. Real malware does not hide from
+BitDefender, Avast, TrendMicro and Trellix while being caught only by three of
+the smallest scanners on the page.
+
+**And you can check the behaviour, not just the opinions.** On the same
+VirusTotal report, open the **BEHAVIOR** tab — that is not an antivirus opinion,
+it is a record of the program actually being run inside their sandbox. For this
+file it reads: Detections **not found**, MITRE signatures **not found**, IDS
+rules **not found**, Sigma rules **not found**, dropped files **not found**, and
+— the one we care about most — **network comms: not found**. We claim this
+program never talks to the internet; that line is somebody else's machine
+confirming it, with no reason to do us any favours.
+
+One more thing you can see there yourself, under **DETAILS → History**: *First
+submission — 2026-08-30*. That is the day we asked for this scan. Nobody had
+ever submitted this file before, which is exactly the "nobody knows it yet"
+situation described above, shown as a date instead of an excuse.
 
 Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.txt) (EN) · [README-ru.txt](README-ru.txt) (RU)
 
