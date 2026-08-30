@@ -107,9 +107,14 @@ Grab the latest exe from **[Releases](../../releases)**.
 start — it reports a missing `api-ms-win-core-path-l1-1-0.dll`. That is a hard
 platform limit of the Qt6/Python toolchain, not a bug.)
 
-> **Note:** the exe is unsigned (homemade), so Windows SmartScreen may show
-> "Windows protected your PC" on first run — click **More info → Run anyway**.
-> First start takes a few extra seconds (self-extracting), that is normal.
+> **Note — the blue screen on first run, and how to get past it.** The exe is
+> unsigned (homemade), so Windows SmartScreen *will* greet you with
+> **"Windows protected your PC"**. Read this before it scares you: the first
+> screen offers **only "Don't run"** — there is no visible way forward. The way
+> through is the small **More info** link; only after clicking it does
+> **Run anyway** appear, next to `Publisher: Unknown publisher` (that is us — an
+> unsigned program has no publisher name).
+> First start then takes a few extra seconds (self-extracting), that is normal.
 
 > **Antivirus false positives:** some antivirus products (we've seen Avira do
 > it) dislike unsigned PyInstaller-packed exes and may quarantine the file on
