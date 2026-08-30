@@ -123,6 +123,34 @@ platform limit of the Qt6/Python toolchain, not a bug.)
 > you can audit the code and **build the exe yourself** in a few minutes: see
 > [BUILD.md](BUILD.md). That is the honest advantage of an open-source gift.
 
+### Don't take our word for it — check the file yourself
+
+A stranger on the internet telling you their program is safe is worth
+nothing. So here is how to check it, in about 30 seconds, with no account and
+nothing installed:
+
+1. Open **[virustotal.com](https://www.virustotal.com/)** and drag the file you
+   downloaded onto the page (or press *Choose file*).
+2. Around 70 antivirus engines scan it and you see every single verdict.
+3. VirusTotal also shows the file's **SHA-256**. Compare it with the SHA-256
+   printed in this version's [release description](../../releases/latest). If
+   they match, you have exactly the file we published — byte for byte, nothing
+   swapped on the way.
+
+**Keep this trick.** It works for *any* file you download, from anyone — not
+just ours. It is probably the most useful 30 seconds you can spend before
+opening something new that came off the internet. If this gift teaches you only
+that, it has already paid for itself.
+
+**How to read the result.** Unsigned PyInstaller-packed programs like this one
+often collect one or two generic machine-learning flags (`Wacatac`,
+`grayware_confidence_60%`). Those are a guess about the *packing tool*, not a
+finding about our code. A couple of red marks among ~70 is normal here; **many
+engines agreeing would not be** — if you ever see that, do not run the file,
+tell us instead. We have not published our own scan figure for this version, so
+the number you get from step 1 is the current, honest answer — ours would only
+be an older copy of it.
+
 Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.txt) (EN) · [README-ru.txt](README-ru.txt) (RU)
 
 ## How it compares
