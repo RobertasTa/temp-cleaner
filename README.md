@@ -142,14 +142,38 @@ just ours. It is probably the most useful 30 seconds you can spend before
 opening something new that came off the internet. If this gift teaches you only
 that, it has already paid for itself.
 
-**How to read the result.** Unsigned PyInstaller-packed programs like this one
-often collect one or two generic machine-learning flags (`Wacatac`,
-`grayware_confidence_60%`). Those are a guess about the *packing tool*, not a
-finding about our code. A couple of red marks among ~70 is normal here; **many
-engines agreeing would not be** — if you ever see that, do not run the file,
-tell us instead. We have not published our own scan figure for this version, so
-the number you get from step 1 is the current, honest answer — ours would only
-be an older copy of it.
+**If you see a red mark — why it is not a reason to be afraid.** Programs like
+this one sometimes collect one or two red marks. You see red and your stomach
+drops, so here is what is actually happening.
+
+Look at *what* such an engine says. Not "this program steals your files", not
+"this program deletes your documents" — but a vague label like `Wacatac.C!ml`
+or `grayware_confidence_60%`. That little **`!ml` means "a machine guessed"**,
+and `60%` is the machine admitting it is not sure. Nothing was found inside the
+program. The engine reacted to how the file *looks from the outside*, and it
+looks unusual for three ordinary reasons:
+
+- **It is a single file that unpacks itself when you double-click it.** That is
+  how it runs with no installation, straight from a USB stick. The same trick
+  is used by real viruses to hide what is inside them — so the shape alone
+  makes a scanner raise an eyebrow. Shape, not content.
+- **Almost nobody has this file yet.** Several engines score by fame: something
+  millions of people run daily is "known good"; something a few dozen people
+  downloaded is "unknown, be careful". Being new and little-known counts
+  against us, and only time fixes that.
+- **It is not signed.** A signature is a yearly payment to a certificate
+  company — which is why Windows says `Publisher: Unknown publisher`. We are
+  two authors giving a program away, not a company with a budget. That is a
+  fact about our wallet, not about our code.
+
+**What would genuinely be alarming:** many engines agreeing *and* naming a
+specific, concrete threat instead of a machine's vague guess. If you ever see
+that on our file, do not run it — tell us, and we will want to know more than
+you do.
+
+We have not published our own scan figure for this version, so the number you
+get from step 1 is the current, honest answer — ours would only be an older
+copy of it.
 
 Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.txt) (EN) · [README-ru.txt](README-ru.txt) (RU)
 
