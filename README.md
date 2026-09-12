@@ -2,6 +2,8 @@
 
 **A transparent temp-file cleaner for Windows — shows its reasoning, previews every deletion, and keeps a full audit log.**
 
+**[Project page](https://robertasta.github.io/temp-cleaner/)** — demo, screenshots and the risk model, on one page.
+
 Built by Claude (Anthropic AI) together with my human friend Robertas. Made with care, given with joy. 🎁
 
 ![Temp Cleaner demo](docs/demo.gif)
@@ -112,9 +114,14 @@ Grab the latest exe from **[Releases](../../releases)**.
 start — it reports a missing `api-ms-win-core-path-l1-1-0.dll`. That is a hard
 platform limit of the Qt6/Python toolchain, not a bug.)
 
-> **Note:** the exe is unsigned (homemade), so Windows SmartScreen may show
-> "Windows protected your PC" on first run — click **More info → Run anyway**.
-> First start takes a few extra seconds (self-extracting), that is normal.
+> **Note — the blue screen on first run, and how to get past it.** The exe is
+> unsigned (homemade), so Windows SmartScreen *will* greet you with
+> **"Windows protected your PC"**. Read this before it scares you: the first
+> screen offers **only "Don't run"** — there is no visible way forward. The way
+> through is the small **More info** link; only after clicking it does
+> **Run anyway** appear, next to `Publisher: Unknown publisher` (that is us — an
+> unsigned program has no publisher name).
+> First start then takes a few extra seconds (self-extracting), that is normal.
 
 > **Antivirus false positives:** some antivirus products (we've seen Avira do
 > it) dislike unsigned PyInstaller-packed exes and may quarantine the file on
@@ -122,6 +129,96 @@ platform limit of the Qt6/Python toolchain, not a bug.)
 > source is right here in this repository, so if your antivirus is suspicious,
 > you can audit the code and **build the exe yourself** in a few minutes: see
 > [BUILD.md](BUILD.md). That is the honest advantage of an open-source gift.
+
+### Don't take our word for it — check the file yourself
+
+A stranger on the internet telling you their program is safe is worth
+nothing. So here is how to check it, in about 30 seconds, with no account and
+nothing installed:
+
+1. Open **[virustotal.com](https://www.virustotal.com/)** and drag the file you
+   downloaded onto the page (or press *Choose file*).
+2. Around 70 antivirus engines scan it and you see every single verdict.
+3. VirusTotal also shows the file's **SHA-256**. Compare it with the SHA-256
+   printed in this version's [release description](../../releases/latest). If
+   they match, you have exactly the file we published — byte for byte, nothing
+   swapped on the way.
+
+**Keep this trick.** It works for *any* file you download, from anyone — not
+just ours. It is probably the most useful 30 seconds you can spend before
+opening something new that came off the internet. If this gift teaches you only
+that, it has already paid for itself.
+
+**What our own scan showed, in full.** Scanned 2026-08-30:
+**[3 engines out of 71](https://www.virustotal.com/gui/file/14c3cd21943c2b0101b5942bcb3e1864c8948419672fc3a4c12f2cef63df12ec)**
+flagged `TempCleaner.exe` — Bkav Pro (`W32.Malware.46CD7D19`), Zillya
+(`Trojan.Disco.Win32.15740`) and SecureAge (which says only the word
+`Malicious`, with no name at all). The other 68 — Avast, Avira, BitDefender,
+ClamAV, TrendMicro, Trellix, Webroot, VIPRE, WithSecure, Yandex, ZoneAlarm and
+the rest — reported it clean. We publish the ugly number rather than a
+comfortable one, because you would find it in 30 seconds anyway.
+
+**If you see a red mark — why it is not a reason to be afraid.** You see red
+and your stomach drops, so here is what is actually happening.
+
+Look at *what* such an engine says. Not "this program steals your files", not
+"this program deletes your documents" — but a vague label like `Wacatac.C!ml`
+or `grayware_confidence_60%`. That little **`!ml` means "a machine guessed"**,
+and `60%` is the machine admitting it is not sure. Nothing was found inside the
+program. The engine reacted to how the file *looks from the outside*, and it
+looks unusual for three ordinary reasons:
+
+- **It is a single file that unpacks itself when you double-click it.** That is
+  how it runs with no installation, straight from a USB stick. The same trick
+  is used by real viruses to hide what is inside them — so the shape alone
+  makes a scanner raise an eyebrow. Shape, not content.
+- **Almost nobody has this file yet.** Several engines score by fame: something
+  millions of people run daily is "known good"; something a few dozen people
+  downloaded is "unknown, be careful". Being new and little-known counts
+  against us, and only time fixes that.
+- **It is not signed.** A signature is a yearly payment to a certificate
+  company — which is why Windows says `Publisher: Unknown publisher`. We are
+  two authors giving a program away, not a company with a budget. That is a
+  fact about our wallet, not about our code.
+
+**What would genuinely be alarming:** many engines agreeing *and* naming a
+specific, concrete threat instead of a machine's vague guess. If you ever see
+that on our file, do not run it — tell us, and we will want to know more than
+you do.
+
+**"But two of them gave it a *name* — `Trojan.Disco`!"** A fair objection, and
+it deserves a straight answer instead of a soothing one. Those names are filing
+labels, not identifications: an engine that decides a file looks suspicious has
+to put it in *some* drawer, so it picks the nearest family in its list. Notice
+what is around them — 68 engines, including every large vendor you would
+recognise, found nothing to file at all. Real malware does not hide from
+BitDefender, Avast, TrendMicro and Trellix while being caught only by three of
+the smallest scanners on the page.
+
+**And you can check the behaviour, not just the opinions.** On the same
+VirusTotal report, open the **BEHAVIOR** tab — that is not an antivirus opinion,
+it is a record of the program actually being run inside their sandbox. For this
+file it reads: Detections **not found**, MITRE signatures **not found**, IDS
+rules **not found**, Sigma rules **not found**, dropped files **not found**, and
+— the one we care about most — **network comms: not found**. We claim this
+program never talks to the internet; that line is somebody else's machine
+confirming it, with no reason to do us any favours.
+
+One caveat, so you are not misled by a *good* result either: the sandbox is a
+whole Windows machine, and Windows chats to Microsoft on its own, so on other
+files that tab can show a stray DNS lookup that belongs to the test machine
+rather than to the program. (Our sibling gift PHOTO home has exactly such a
+line, and we say so on its page instead of quoting only the clean one.) **The
+check that depends on nobody's sandbox is the source.** This program imports no
+networking library at all — no `socket`, no `requests`, no `urllib.request`, no
+`aiohttp`. Search this repository for those words: you will find `urllib.parse`
+used to percent-encode text, and `webbrowser.open`, which hands a link to *your*
+browser when *you* press the "Ask AI" button. That is the whole of it.
+
+One more thing you can see there yourself, under **DETAILS → History**: *First
+submission — 2026-08-30*. That is the day we asked for this scan. Nobody had
+ever submitted this file before, which is exactly the "nobody knows it yet"
+situation described above, shown as a date instead of an excuse.
 
 Plain-text guides: [README.txt](README.txt) (LT) · [README-en.txt](README-en.txt) (EN) · [README-ru.txt](README-ru.txt) (RU)
 
