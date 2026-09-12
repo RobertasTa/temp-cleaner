@@ -797,7 +797,10 @@ class MainWindow(QMainWindow):
         self.table.setWordWrap(False)
         hdr = self.table.horizontalHeader()
         hdr.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-        for i, w in enumerate([480, 100, 120, 100, 90]):
+        # Tipo stulpelis (3) platesnis nuo v1.2: i ji dabar telpa ne tik spalvos vardas,
+        # bet ir ZYDROS priezastis ("You decide: paid software"). Su senaisiais 100 px
+        # tekstas buvo kerpamas iki "You dec...oftware" (Roberto pastaba 2026-09-12).
+        for i, w in enumerate([480, 90, 110, 200, 80]):
             if i == 0:
                 continue
             self.table.setColumnWidth(i, w)
@@ -828,10 +831,15 @@ class MainWindow(QMainWindow):
                 # Sviesoforas lieka trims spalvoms = ka PROGRAMA siulo daryti.
                 # Zydra reiskia "radau, bet nesiulau nieko" - todel vietoj spalvos
                 # vardo rasom, KAS cia per radinys, ir zmogus sprendzia pats.
-                items[3].setText("%s: %s" % (t("Sprendziate jus"),
-                                             zydra_del(cand.zydra_del)))
-                items[3].setToolTip(t("I 'Valyti viska' nepatenka niekada. "
-                                      "Norite - valykite si kataloga atskirai."))
+                # Stulpelyje TIK priezastis: "You decide" pasako ir spalva, ir legenda
+                # virsuje, o pilnas "You decide: paid software" (300-384 px) lenteleje
+                # buvo kerpamas iki "You dec...oftware" (Roberto pastaba 2026-09-12).
+                # Pilna frazė lieka uzvedus pele.
+                items[3].setText(zydra_del(cand.zydra_del))
+                items[3].setToolTip(t("Sprendziate jus") + ": "
+                                    + zydra_del(cand.zydra_del) + " - "
+                                    + t("I 'Valyti viska' nepatenka niekada. "
+                                        "Norite - valykite si kataloga atskirai."))
             # Ilgi keliai lenteleje trumpinami (C:...) - pilnas kelias tooltip'e
             items[0].setToolTip(cand.path)
             for col, item in enumerate(items):

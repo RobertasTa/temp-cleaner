@@ -234,14 +234,14 @@ _SPALVA_EN = {"ZALIA": "GREEN", "GELTONA": "YELLOW", "ZYDRA": "You decide",
 # Zydros eilutes uzrasas: ka PROGRAMA apie ta vieta zino. Roberto patvirtinta
 # 2026-08-31: "Sprendziate jus" / "You decide".
 _ZYDRA_LT = {"NAUDOJAMA_DABAR": "naudojama dabar",
-             "SINCHRONIZACIJA": "sinchronizacijos aplankas",
+             "SINCHRONIZACIJA": "sinchronizacija",
              "MOKAMA_PROGRAMA": "mokama programa",
-             "SENOS_VERSIJOS": "senos programos versijos",
+             "SENOS_VERSIJOS": "senos versijos",
              "": "nezinoma"}
-_ZYDRA_EN = {"NAUDOJAMA_DABAR": "in use right now",
+_ZYDRA_EN = {"NAUDOJAMA_DABAR": "in use now",
              "SINCHRONIZACIJA": "sync folder",
              "MOKAMA_PROGRAMA": "paid software",
-             "SENOS_VERSIJOS": "old program versions",
+             "SENOS_VERSIJOS": "old versions",
              "": "unknown"}
 
 
