@@ -702,9 +702,14 @@ class MainWindow(QMainWindow):
         Converts back to Candidate objects safely in the main thread.
         """
         from models import Candidate
+        # ⚠️ Laukai isvardijami RANKOMIS, tad pridejus nauja lauka i Candidate
+        # BUTINA jo nepamirsti cia: 2026-09-12 taip dingo `zydra_del` - spalva
+        # keliaudavo per gija, o priezastis ne, ir zmogus matydavo "unknown".
+        # Testai to nepagavo, nes tikrino skeneri tiesiogiai, be gijos.
         candidates = [
             Candidate(path=d["path"], file_count=d["file_count"],
                       total_bytes=d["total_bytes"], color=d["color"],
+                      zydra_del=d.get("zydra_del", ""),
                       age_files=d.get("age_files"), age_bytes=d.get("age_bytes"))
             for d in candidate_dicts
         ]
