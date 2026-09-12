@@ -76,8 +76,13 @@ _EN = {
     "Temp valytuvas - Sisteminiai laikini failai":
         "Temp Cleaner - System temporary files",
     "Rodymas: Visos vietos | Is viso: 0 MB": "View: All locations | Total: 0 MB",
-    "ZALIA - saugu valyti automatiskai | GELTONA - tik su patvirtinimu | RAUDONA - tik perziura":
-        "GREEN - safe to clean | YELLOW - confirmation required | RED - view only",
+    "ZALIA - saugu valyti automatiskai | GELTONA - tik su patvirtinimu | ZYDRA - sprendziate jus | RAUDONA - tik perziura":
+        "GREEN - safe to clean | YELLOW - confirmation required | BLUE - you decide | RED - view only",
+    "Sprendziate jus": "You decide",
+    "I 'Valyti viska' nepatenka niekada. Norite - valykite si kataloga atskirai.":
+        "Never included in 'Clean all'. You can still clean this folder on its own.",
+    "Ar norite valyti ZYDRA vieta? Programa jos valyti NESIULO. {}":
+        "Clean this location? The program does NOT suggest cleaning it. {}",
     "Katalogas": "Folder",
     "Failai": "Files",
     "Dydis (MB)": "Size (MB)",
@@ -223,7 +228,21 @@ _EN = {
 
 # Spalvu zymos: vidiniai raktai VISADA lietuviski (ZALIA/GELTONA/RAUDONA),
 # EN rezime tik RODOMOS kitaip (kaip fam() dubliu programoj).
-_SPALVA_EN = {"ZALIA": "GREEN", "GELTONA": "YELLOW", "RAUDONA": "RED"}
+_SPALVA_EN = {"ZALIA": "GREEN", "GELTONA": "YELLOW", "ZYDRA": "You decide",
+              "RAUDONA": "RED"}
+
+# Zydros eilutes uzrasas: ka PROGRAMA apie ta vieta zino. Roberto patvirtinta
+# 2026-08-31: "Sprendziate jus" / "You decide".
+_ZYDRA_LT = {"NAUDOJAMA_DABAR": "naudojama dabar",
+             "SINCHRONIZACIJA": "sinchronizacijos aplankas",
+             "MOKAMA_PROGRAMA": "mokama programa",
+             "SENOS_VERSIJOS": "senos programos versijos",
+             "": "nezinoma"}
+_ZYDRA_EN = {"NAUDOJAMA_DABAR": "in use right now",
+             "SINCHRONIZACIJA": "sync folder",
+             "MOKAMA_PROGRAMA": "paid software",
+             "SENOS_VERSIJOS": "old program versions",
+             "": "unknown"}
 
 
 def t(raktas):
@@ -238,6 +257,13 @@ def spalva(zyma):
     if LANG == "en":
         return _SPALVA_EN.get(zyma, zyma)
     return zyma
+
+
+def zydra_del(raktas):
+    """Kodel eilute zydra, zmogaus kalba."""
+    if LANG == "en":
+        return _ZYDRA_EN.get(raktas, _ZYDRA_EN[""])
+    return _ZYDRA_LT.get(raktas, _ZYDRA_LT[""])
 
 
 def valymu_zodis(n):

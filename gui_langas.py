@@ -18,10 +18,15 @@ from PyQt6.QtGui import QColor, QFont, QIcon
 from handlers import (handler_on_scan, handler_on_clean_green,
                       handler_on_clean_row, handler_on_preview)
 from models import COLOR_HEX, AGE_DAYS
-from kalba import t, spalva
+from kalba import t, spalva, zydra_del
 
 # Rodoma Apie... langelyje; galutini numeri nustatyti leidziant release
-VERSIJA = "1.1"
+VERSIJA = "1.2"
+
+# Lenteles teksto spalva. Visi musu eiluciu fonai sviesus (COLOR_HEX), todel tekstas
+# visada tamsus ir nustatomas KARTU su fonu - kitaip tamsi sistemos tema duoda balta
+# teksta ant sviesaus fono (SDF v1.5.1 pamoka, TODO_kitam_kartui.md 1 punktas).
+TEKSTO_SPALVA = QColor("#1A1A1A")
 
 
 def _resource_path(name):
@@ -209,7 +214,7 @@ class MainWindow(QMainWindow):
 
         # P1 fix: Color legend - added to layout between title and status
         self.lbl_legend = QLabel(
-            t("ZALIA - saugu valyti automatiskai | GELTONA - tik su patvirtinimu | RAUDONA - tik perziura"))
+            t("ZALIA - saugu valyti automatiskai | GELTONA - tik su patvirtinimu | ZYDRA - sprendziate jus | RAUDONA - tik perziura"))
         self.lbl_legend.setObjectName("LegendLabel")
         self.lbl_legend.setStyleSheet(
             "padding: 4px 8px; color: #666; font-size: 11px;"
@@ -264,7 +269,7 @@ class MainWindow(QMainWindow):
         # Valdymo juosta: amziaus slankiklis + viso-atlaisvinta skaitliukas
         hctrl = QHBoxLayout()
         lbl_age_cap = QLabel(t("Amziaus riba:"))
-        lbl_age_cap.setStyleSheet("font-size: 12px; color: #444;")
+        lbl_age_cap.setStyleSheet("font-size: 12px; color: palette(window-text);")
         self.age_slider = QSlider(Qt.Orientation.Horizontal)
         self.age_slider.setObjectName("age_slider")
         self.age_slider.setRange(1, 30)
@@ -272,7 +277,7 @@ class MainWindow(QMainWindow):
         self.age_slider.setFixedWidth(220)
         self.lbl_age_val = QLabel()
         self.lbl_age_val.setObjectName("lbl_age_val")
-        self.lbl_age_val.setStyleSheet("font-size: 12px; font-weight: bold; color: #4a2c00;")
+        self.lbl_age_val.setStyleSheet("font-size: 12px; font-weight: bold; color: palette(window-text);")
         self.age_slider.valueChanged.connect(self._on_age_changed)
         self._on_age_changed(self.age_slider.value())
 
@@ -514,7 +519,7 @@ class MainWindow(QMainWindow):
             "Saugus sisteminiu laikinu failu valymas - viska matai ir supranti.")))
         info.addWidget(QLabel(t("Versija {v}").format(v=VERSIJA)))
         autoriai = QLabel("Robertas & Claude")
-        autoriai.setStyleSheet("color: #5a5e6b;")
+        autoriai.setStyleSheet("color: palette(placeholder-text);")
         info.addWidget(autoriai)
         virsus.addLayout(info)
         lay.addLayout(virsus)
@@ -800,7 +805,7 @@ class MainWindow(QMainWindow):
 
     def _fill_table(self, candidates):
         # P5 fix: sort by color priority (ZALIA > GELTONA > RAUDONA), then path alpha
-        color_priority = {"ZALIA": 0, "GELTONA": 1, "RAUDONA": 2}
+        color_priority = {"ZALIA": 0, "GELTONA": 1, "ZYDRA": 2, "RAUDONA": 3}
         data = sorted(candidates, key=lambda c: (color_priority.get(c.color, 9), c.path))
         self._candidates = data
         self.table.setRowCount(len(data))
@@ -814,6 +819,14 @@ class MainWindow(QMainWindow):
                 QTableWidgetItem("{:.2f}".format(size_mb)),
                 QTableWidgetItem(spalva(cand.color)),
             ]
+            if cand.color == "ZYDRA":
+                # Sviesoforas lieka trims spalvoms = ka PROGRAMA siulo daryti.
+                # Zydra reiskia "radau, bet nesiulau nieko" - todel vietoj spalvos
+                # vardo rasom, KAS cia per radinys, ir zmogus sprendzia pats.
+                items[3].setText("%s: %s" % (t("Sprendziate jus"),
+                                             zydra_del(cand.zydra_del)))
+                items[3].setToolTip(t("I 'Valyti viska' nepatenka niekada. "
+                                      "Norite - valykite si kataloga atskirai."))
             # Ilgi keliai lenteleje trumpinami (C:...) - pilnas kelias tooltip'e
             items[0].setToolTip(cand.path)
             for col, item in enumerate(items):
@@ -824,8 +837,12 @@ class MainWindow(QMainWindow):
             # nespeja persipiesti skrolinant ir atsiskiria nuo eiluciu.
             clear_item = QTableWidgetItem("Clear" if cand.color != "RAUDONA" else "")
             clear_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            # Teksto spalva nustatoma VISIEMS, ir RAUDONAI eilutei, kurios mygtukas
+            # tuscias: kitaip tas vienas langelis liktu be teksto spalvos (rado patikra
+            # G2b). Melyna = veikiantis mygtukas, tamsi = isjungtas.
+            clear_item.setForeground(QColor("#1a4485") if cand.color != "RAUDONA"
+                                     else TEKSTO_SPALVA)
             if cand.color != "RAUDONA":
-                clear_item.setForeground(QColor("#1a4485"))
                 cf = clear_item.font()
                 cf.setBold(True)
                 cf.setUnderline(True)
@@ -834,12 +851,18 @@ class MainWindow(QMainWindow):
             self.table.setItem(idx, 4, clear_item)
 
             # Row background color
+            # Tamsioje sistemos temoje NUSTATYTI TIK FONA neuztenka: teksto spalva lieka
+            # sistemos, o tamsi tema duoda BALTA -> baltas tekstas ant musu sviesaus fono.
+            # Ta pati klaida SDF v1.5.1 buvo rasta fotografo macOS tamsioje temoje.
+            # Todel visi musu fonai sviesus -> tekstas visada tamsus, nustatomas kartu.
             hex_ = COLOR_HEX.get(cand.color, "#ffffff")
             qcol = QColor(hex_)
             for c in range(self.table.columnCount()):
                 cell = self.table.item(idx, c)
                 if cell is not None:
                     cell.setBackground(qcol)
+                    if c != 4:          # 4 stulpelis - "Clear", jis turi savo spalva
+                        cell.setForeground(TEKSTO_SPALVA)
             self._row_color_data[idx] = cand.color
 
         # P5 fix: status text uses "Is viso" instead of "Iviskio dydis"

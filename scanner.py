@@ -6,7 +6,85 @@ from pathlib import Path
 from models import (
     Candidate, GREEN_RELATIVES, GREEN_BASE_INDEX,
     BLACKLIST_NAMES, HEURISTIC_NAMES,
+    SINCHRONIZACIJOS_VARDAI, MOKAMU_VARDAI, PALIKTI_VERSIJU,
 )
+
+
+# --- ZYDRA: "Sprendziate jus" (2026-09-12) -----------------------------------
+# Sviesoforas lieka trims spalvoms = ka PROGRAMA siulo daryti. Zydra reiskia,
+# kad radom ka nors, ko patys nesiulom liesti: sprendzia zmogus.
+#
+# Roberto masinoje 08-31 pamatuota, ka TC butu SIULES valyti GELTONAI, nors
+# negalima: SynologyDrive	emp (1 018 504 failai, 6,5 GB, naujausias TA PACIA
+# diena), Autodesk\Inventor 2026\Logs, hermes\cache. Synology yra gyva
+# sinchronizacijos zona, Inventorius - Roberto pajamos.
+#
+# NAUDOJAMA_DABAR yra BENDRINIS pozymis: jokio saraso nereikia, ir butent jis
+# butu pagaves ir Synology, ir Inventoriu. Vardu sarasai (sinchronizacija,
+# mokamos programos) visada nepilni - tai pasakyta README, o ne apsimesta,
+# kad atpazistam viska.
+
+_VERSIJOS_SABLONAS = None
+
+
+# Kiek failu, jaunesniu nei para, reiskia "cia rasoma DABAR".
+# PAMATUOTA 2026-09-12 ant Roberto kompiuterio (474 rastos vietos, `_darbal/matuok_zydra.py`):
+#   riba 1  -> 22 vietos, tarp ju Opera kesas su 6 svieziais failais (valyti saugu)
+#   riba 20 ->  6 vietos: SynologyDrive	emp (87 022 svieziu is 1 142 091), Claude kesas
+#               (veikia dabar), claude-cli kesas, USOShared\Logs - butent tos, kurias
+#               ir norim rodyti
+# DALIES kriterijaus (procento nuo visu failu) ATSISAKYTA: Synology sviezi failai sudaro
+# tik 8 % is milijono, tad bet koks procentas ji praleistu - o jis cia pagrindinis taikinys.
+SVIEZIU_FAILU_RIBA = 20
+
+
+def _naudojama_dabar(age_files):
+    """Ar kataloge DABAR rasoma: bent SVIEZIU_FAILU_RIBA failu jaunesni nei para.
+
+    Amziaus kibireliai jau suskaiciuoti skeno metu (`_count_files_buckets`),
+    todel sis patikrinimas NIEKO nekainuoja - jokio papildomo disko skaitymo.
+    """
+    return bool(age_files) and age_files[0] >= SVIEZIU_FAILU_RIBA
+
+
+def _vardas_sarase(kelias, sarasas):
+    """Ar kuri nors kelio dalis yra sarase (be raidziu dydzio)."""
+    try:
+        dalys = [d.lower() for d in Path(kelias).parts]
+    except (OSError, ValueError):
+        return False
+    return any(d in sarasas for d in dalys)
+
+
+def _versijuotas_katalogas(kelias):
+    """Ar katalogo vardas atrodo kaip programos versija (app-1.2.3, 2.0.4, v3).
+
+    Naudojama tik kaip pozymis: jei tevo kataloge tokiu yra daugiau nei
+    PALIKTI_VERSIJU, senesnes laikom kandidatemis, kurias rodom, bet nesiulom.
+    """
+    global _VERSIJOS_SABLONAS
+    if _VERSIJOS_SABLONAS is None:
+        import re
+        _VERSIJOS_SABLONAS = re.compile(r"(^|[-_ ])v?\d+\.\d+(\.\d+)*($|[-_ ])")
+    try:
+        return bool(_VERSIJOS_SABLONAS.search(Path(kelias).name.lower()))
+    except (OSError, ValueError):
+        return False
+
+
+def zydra_priezastis(kelias, age_files):
+    """-> priezasties raktas arba "" (tada spalva nesikeicia).
+
+    Tvarka = prioritetas: viena vieta gali atitikti kelis pozymius
+    (Synology temp yra IR sinchronizacija, IR naudojama dabar).
+    """
+    if _vardas_sarase(kelias, SINCHRONIZACIJOS_VARDAI):
+        return "SINCHRONIZACIJA"
+    if _vardas_sarase(kelias, MOKAMU_VARDAI):
+        return "MOKAMA_PROGRAMA"
+    if _naudojama_dabar(age_files):
+        return "NAUDOJAMA_DABAR"
+    return ""
 
 
 def get_bases():
@@ -251,8 +329,14 @@ def scan(progress_callback=None):
 
         cnt, sz, af, ab = _count_files_buckets(hp)
         color = "RAUDONA" if is_red else "GELTONA"
+        # RAUDONA stipresne uz ZYDRA: draudimas lieka draudimu. Zydra keicia
+        # tik GELTONA - t.y. ta, kuria programa butu siuliusi valyti.
+        zydra_del = "" if is_red else zydra_priezastis(p_str, af)
+        if zydra_del:
+            color = "ZYDRA"
         candidates.append(Candidate(path=p_str, file_count=cnt,
                                     total_bytes=sz, color=color,
+                                    zydra_del=zydra_del,
                                     age_files=af, age_bytes=ab))
         if progress_callback is not None:
             progress_callback(candidates[-1])

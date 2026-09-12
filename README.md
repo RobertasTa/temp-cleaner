@@ -39,6 +39,13 @@ see** and a **journal of every decision**:
 - **GREEN** locations (system temp, well-known caches) — safe to clean automatically.
 - **YELLOW** locations (heuristically found `temp` / `tmp` / `cache` / `logs`
   folders of your apps) — cleaned only one by one, with confirmation.
+- **BLUE** locations — *found, but the program does not suggest anything*.
+  Something is being written there right now, it is a sync folder (Synology,
+  OneDrive, Dropbox…), or it belongs to paid software (Autodesk, Adobe…).
+  These **never** enter "Clean all"; you can still clean one on its own, with a
+  separate warning. The name lists are deliberately incomplete — no list can
+  know every program in the world, so the main signal is a generic one: at
+  least 20 files younger than a day means *this folder is in use right now*.
 - **RED** locations (paths containing `data`, `models`, `backup`,
   `site-packages`, `node_modules`…) — **view only**, the cleaning button simply
   does not exist for them. Your Python packages and app data are not "junk".

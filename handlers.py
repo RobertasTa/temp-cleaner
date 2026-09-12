@@ -236,6 +236,8 @@ def handler_on_clean_row(gui, folder_path):
     if cand.color != "ZALIA":
         reply = QMessageBox.question(
             gui, t("Patvirtinimas"),
+            t("Ar norite valyti ZYDRA vieta? Programa jos valyti NESIULO. {}").format(folder_path)
+            if cand.color == "ZYDRA" else
             t("Ar norite valyti GELTONA vieta? {}").format(folder_path),
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
         # OKF: returns QMessageBox.StandardButton enum
