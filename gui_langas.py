@@ -21,7 +21,7 @@ from models import COLOR_HEX, AGE_DAYS
 from kalba import t, spalva, zydra_del
 
 # Rodoma Apie... langelyje; galutini numeri nustatyti leidziant release
-VERSIJA = "1.2"
+VERSIJA = "1.3"
 
 # Lenteles teksto spalva. Visi musu eiluciu fonai sviesus (COLOR_HEX), todel tekstas
 # visada tamsus ir nustatomas KARTU su fonu - kitaip tamsi sistemos tema duoda balta
@@ -211,6 +211,15 @@ class MainWindow(QMainWindow):
             "padding: 5px 8px; color: #1a3e6e; font-size: 12px; font-weight: bold;"
             "background-color: #eaf1fb; border: 1px solid #b9cdec; border-radius: 4px;"
         )
+        # ⛔ BUTINA, ne kosmetika (Roberto pastaba 2026-09-13, pamatuota):
+        # QLabel BE wordWrap savo MINIMALIU plociu laiko VISO teksto ploti -
+        # jis negali lauzti, tad negali ir siaureti. Po "Perziuros" cia atsiranda
+        # ~104 simboliu tekstas, ir statuso minimumas soka 203 -> 627 px. Kadangi
+        # QHBoxLayout minimumas yra vaiku minimumu suma, tai tampa VISO LANGO
+        # minimumu: langas issitempia PATS ir jo nebeimanoma sumazinti pele.
+        # Su wordWrap minimumas nukrenta iki 93 px (pamatuota, ne spėta).
+        # ⚠️ setSizePolicy(Ignored) cia NEPADEDA - tikrinta, minimumas lieka 627.
+        self.lbl_status.setWordWrap(True)
 
         # P1 fix: Color legend - added to layout between title and status
         self.lbl_legend = QLabel(
@@ -344,6 +353,18 @@ class MainWindow(QMainWindow):
         self.btn_clear_all = QPushButton(t("Valyti viska is zaliu vietu"))
         self.btn_clear_all.setObjectName("btn_clear_all")
 
+        # v1.3: atskiras langas "kur dingo vieta" (diskas_langas.py).
+        # Statomas SALIA valytuvo, ne PER ji - siam mygtukui ir vienai
+        # eilutei zemiau pasibaigia visas isikisimas i veikianti langa.
+        self.btn_diskas = QPushButton(t("Diskas"))
+        self.btn_diskas.setObjectName("btn_diskas")
+        # Neaktyvus iki pirmo skeno - kaip ir btn_preview (Roberto sprendimas
+        # 2026-09-13). Dvi priezastys: (1) programa PIRMIAUSIA yra valytuvas, ir
+        # skenavimas cia pagrindinis veiksmas; (2) be skeno disko pyrage NERA
+        # siuksliu dalies, o zmogus mato diagrama ir mano, kad mato viska.
+        self.btn_diskas.setEnabled(False)
+        self.btn_diskas.setToolTip(t("Pirma paleiskite skena."))
+
         # P5 fix: "UzdarA" -> "Uzdaryti" (ASCII only in code per AGENTS.md)
         self.btn_close = QPushButton(t("Uzdaryti"))
         self.btn_close.setObjectName("btn_close")
@@ -352,6 +373,7 @@ class MainWindow(QMainWindow):
         btn_row.addWidget(self.btn_scan)
         btn_row.addWidget(self.btn_preview)
         btn_row.addWidget(self.btn_clear_all, stretch=1)
+        btn_row.addWidget(self.btn_diskas)
         btn_row.addWidget(self.btn_close)
 
         # Assemble vertical layout
@@ -397,6 +419,7 @@ class MainWindow(QMainWindow):
         self.btn_scan.clicked.connect(self._on_scan)
         self.btn_preview.clicked.connect(self._on_preview)
         self.btn_clear_all.clicked.connect(self._on_clean_green)
+        self.btn_diskas.clicked.connect(self._on_diskas)
         self.btn_close.clicked.connect(self.close)
 
     # -- Amziaus slankiklis ir viso-atlaisvinta skaitliukas --
@@ -720,6 +743,9 @@ class MainWindow(QMainWindow):
         self.btn_scan.setEnabled(True)
         self.btn_clear_all.setEnabled(True)
         self.btn_preview.setEnabled(True)   # po skeno perziura jau turi ka rodyti
+        # v1.3: tas pats ir diskui - tik dabar jis turi siuksliu dali
+        self.btn_diskas.setEnabled(True)
+        self.btn_diskas.setToolTip("")
 
     @pyqtSlot(str)
     def _on_worker_error(self, msg):
@@ -997,6 +1023,22 @@ class MainWindow(QMainWindow):
 
     def _on_clean_green(self):
         handler_on_clean_green(self)
+
+    def _on_diskas(self):
+        """v1.3: atidaro "kur dingo vieta" langa.
+
+        Importas cia, o ne failo virsuje, samoningai: valytuvui sis modulis
+        nereikalingas, ir jei jame kas nors sulustu, pagrindine programa
+        turi likti gyva. PyInstaller ji randa statiskai ir be virsutinio
+        importo (kvietimas matomas AST'e), bet .spec pridetas i hiddenimports
+        del tikrumo - zr. TempCleaner.spec.
+        """
+        try:
+            from diskas_langas import DiskoLangas
+            DiskoLangas(self).exec()
+        except Exception as e:  # noqa: BLE001 - vartotojui geriau zinute nei griutis
+            QMessageBox.warning(self, t("Diskas"),
+                                t("Nepavyko atidaryti: {}").format(e))
 
 
 # Standalone launcher

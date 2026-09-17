@@ -55,6 +55,35 @@ KAIP NAUDOTIS (zingsnis po zingsnio)
 7. Kampe matai "Viso atlaisvinta" - kiek vietos programa tau jau
    sutaupe per visus valymus.
 
+DISKAS - KUR DINGO VIETA (nuo v1.3)
+-----------------------------------
+Po skenavimo atsiranda mygtukas "Diskas". Jis atsako i klausima, i
+kuri neatsako joks disko skaitytuvas: KODEL skaiciai nesueina.
+
+Apie disko vieta yra keturi nepriklausomi saltiniai - pats diskas,
+particiju lentele, failu sistema ir tai, ka rado si programa. Jie
+nieko nezino vienas apie kita, o kiekvienas kitas irankis rodo tik
+VIENA is ju ir tyli apie likusius. Cia jie sulyginami.
+
+Diagramoje matai: tavo duomenys, sistemos failai (pagefile.sys ir
+kiti - ju trinti negalima, Windows juos naudoja dirbdamas), siuksles
+(tai, ka randa sis valytuvas), laisva vieta ir - jei yra - vieta be
+disko raides. Pastaroji nepriklauso nei C:, nei D:, todel jos nerodo
+nei Explorer, nei failu skaitytuvai.
+
+Jei skaiciai nesueina, programa pasako KODEL ir isvardija
+itariamuosius su komandomis, kuriomis gali pats pasitikrinti. Visos
+rodomos komandos TIK RODO - programa nieko netaiso ir netrina.
+
+Ir pasako, ko NEPAMATE: seseliniu kopiju bei failu lenteles (MFT)
+dydzio be administratoriaus teisiu gauti neimanoma, todel tai
+parasyta atvirai, o ne nutyleta.
+
+Desiniu peles klavisu ant paaiskinimo: "Kas tai?" (paieska apie
+pazymeta zodi), kopijuoti, arba "Nukopijuoti klausima" - paruostas
+tekstas su visais tavo skaiciais. Gali ji iklijuoti DI padejejui
+arba nusiusti kompiuterininkui ir neaiskinti visko is naujo.
+
 KAS NIEKADA NETRINAMA (saugikliai)
 ----------------------------------
   * Failai, jaunesni uz amziaus riba          -> zurnale SKIPPED AGE

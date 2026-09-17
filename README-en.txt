@@ -57,6 +57,36 @@ HOW TO USE (step by step)
 7. The corner shows "Total freed" - how much space the program
    has saved you across all cleanups.
 
+DISK - WHERE THE SPACE WENT (since v1.3)
+----------------------------------------
+After a scan a "Disk" button appears. It answers the question no disk
+scanner answers: WHY the numbers do not add up.
+
+There are four independent sources of truth about disk space - the
+physical disk, the partition table, the file system, and what this
+program itself found. They know nothing about each other, and every
+other tool shows only ONE of them and stays silent about the rest.
+Here they are reconciled.
+
+The chart shows: your data, system files (pagefile.sys and friends -
+these cannot be deleted, Windows uses them while it runs), junk (what
+this cleaner finds), free space, and - if present - space with no
+drive letter. That last one belongs neither to C: nor to D:, which is
+why neither Explorer nor any file scanner ever shows it.
+
+When the numbers do not add up, the program says WHY and lists the
+suspects together with commands you can check yourself. Every command
+shown only SHOWS things - the program changes and deletes nothing.
+
+It also tells you what it could NOT see: the size of shadow copies and
+of the file table (MFT) cannot be obtained without administrator
+rights, so that is stated openly instead of being quietly skipped.
+
+Right-click on the explanation: "What is this?" (search for the
+selected word), copy, or "Copy the question" - a ready-made text with
+all your numbers. Paste it to an AI assistant or send it to a
+technician instead of explaining everything from scratch.
+
 WHAT IS NEVER DELETED (safety interlocks)
 -----------------------------------------
   * Files younger than the age limit        -> log: SKIPPED AGE

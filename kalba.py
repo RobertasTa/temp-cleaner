@@ -224,6 +224,138 @@ _EN = {
         "Safe system temp cleanup - you see and understand everything.",
     "Versija {v}": "Version {v}",
     "Kurejo puslapis:": "Project page:",
+
+    # --- v1.3 skirtukas "Diskas": kur dingo vieta ---
+    "Diskas": "Disk",
+    "Diskas:": "Disk:",
+    "Diskas - kur dingo vieta": "Disk - where the space went",
+    "Ka tai reiskia:": "What this means:",
+    "Duomenys": "Your data",
+    "Siuksles": "Junk",
+    "SIUKSLES:": "JUNK:",
+    "Tiek rado valytuvas. Si dalis - vienintele, kuria galite susigrazinti.":
+        "That is what the cleaner found. This is the only part you can get back.",
+    "Siuksliu dalis dar nesuskaiciuota - paleiskite "
+    "\"Skanuoti\" pagrindiniame lange.":
+        "The junk share has not been counted yet - run \"Scan\" in the main window.",
+    "Particiju be raides:": "Partitions with no drive letter:",
+    "Tiek turi beveik kiekvienas Windows kompiuteris: "
+    "EFI ir atkurimo particijos. Tai normalu.":
+        "Almost every Windows computer has that much: the EFI and recovery "
+        "partitions. This is normal.",
+    "Sistemos failai": "System files",
+    "SISTEMOS FAILAI": "SYSTEM FILES",
+    "Siu failu trinti negalima - Windows juos naudoja dirbdamas.":
+        "These files cannot be deleted - Windows uses them while it runs.",
+    "- mainu failas, Windows ji naudoja vietoj atminties":
+        "- the page file, Windows uses it instead of memory",
+    "- hibernacijos failas, dydis nuo atminties kiekio":
+        "- the hibernation file, its size follows the amount of memory",
+    "- moderniu programu mainai": "- swap for modern apps",
+    "Seseliniu kopiju ir atkurimo tasku dydzio "
+    "(be administratoriaus teisiu jo gauti neimanoma)":
+        "the size of shadow copies and restore points "
+        "(impossible to get without administrator rights)",
+    "Failu lenteles (MFT) rezervo dydzio "
+    "(be administratoriaus teisiu jo gauti neimanoma)":
+        "the size of the file table (MFT) reserve "
+        "(impossible to get without administrator rights)",
+    "Tikrinti is naujo": "Check again",
+    "Perskaityti is naujo": "Read again",
+    "Perskaityta": "Read",
+    "Issaugoti ataskaita": "Save report",
+    "Issaugota": "Saved",
+    "Issaugo visu disku skaicius i .txt faila - gali nusiusti "
+    "kompiuterininkui arba ikelti i DI padejeja.":
+        "Saves the numbers for every disk into a .txt file - you can send it to "
+        "a technician or hand it to an AI assistant.",
+    "DISKO ATASKAITA": "DISK REPORT",
+    "Sudaryta:": "Created:",
+    "Programa:": "Program:",
+    "Sios ataskaitos programa nieko netaiso ir netrina - "
+    "ji tik parodo skaicius.":
+        "The program behind this report changes and deletes nothing - "
+        "it only shows the numbers.",
+    "Is naujo perskaito disku duomenis - jei prijungete diska "
+    "arba pasikeite laisva vieta.":
+        "Reads the disk data again - if you plugged in a drive or the free "
+        "space changed.",
+    "kur dingo vieta": "where the space went",
+    "Viskas sueina: visi": "Everything adds up: all",
+    "paskirstyti": "are accounted for",
+    "is": "of",
+    "Uzdaryti": "Close",
+    "Uzimta": "Used",
+    "Laisva": "Free",
+    "Particijos be raides": "Partitions with no drive letter",
+    "Nepaaiskinta": "Unaccounted",
+    "Nepaaiskinta:": "Unaccounted:",
+    "Viskas sueina.": "Everything adds up.",
+    "Sio disko duomenu perskaityti nepavyko.": "Could not read this disk.",
+    "KA MATOME": "WHAT WE SEE",
+    "KO NEPAMATEME": "WHAT WE COULD NOT SEE",
+    "KAS GALIMAI NUTIKE": "WHAT MAY HAVE HAPPENED",
+    "NESUTAPIMAS:": "MISMATCH:",
+    "Pasitikrinti:": "Check it with:",
+    "Fizinis diskas": "Physical disk",
+    "Particija": "Partition",
+    "Failu sistema": "File system",
+    "pradzia": "starts at",
+    "uzimta": "used",
+    "laisva": "free",
+    "Skaiciai sueina - visa disko talpa paskirstyta.":
+        "The numbers add up - the whole disk is accounted for.",
+    "Priminimas: gamintojas raso 1 TB = 1000 mlrd. baitu, "
+    "o Windows skaiciuoja dvejetainiais, todel 1 TB diskas "
+    "rodomas kaip ~931 GB. Tai ne dingusi vieta.":
+        "A reminder: the maker counts 1 TB as 1,000,000,000,000 bytes, while "
+        "Windows counts in binary, so a 1 TB disk shows as about 931 GB. "
+        "That space is not missing.",
+    "Sios komandos tik RODO - nieko nekeicia ir netrina.":
+        "These commands only SHOW things - they change and delete nothing.",
+    "Kopijuoti pazymeta": "Copy selection",
+    "Kopijuoti viska": "Copy everything",
+    "Nukopijuoti klausima": "Copy the question",
+    "Nukopijuota": "Copied",
+    "Klausimas apie disko vieta Windows sistemoje.":
+        "A question about disk space on Windows.",
+    "fizinis disko dydis": "physical disk size",
+    "particijos dydis": "partition size",
+    "tomas pagal failu sistema": "volume as the file system sees it",
+    "nepaaiskinta": "unaccounted",
+    "Klausimas: kur galejo dingti si vieta ir kaip tai "
+    "pasitikrinti nieko nesugadinant?":
+        "Question: where could this space have gone, and how can I check that "
+        "without breaking anything?",
+
+    # Tekstai, kurie i t() ateina per zodynus (_KAS_TAI, _ITARIAMIEJI,
+    # _NEMATOME_TEKSTAS diskas_langas.py) - statine patikra ju nepagauna,
+    # todel laikomi cia kartu ir tikrinami akimis.
+    "Diske yra vietos, kuri neturi disko raides - ji nepriklauso nei C:, "
+    "nei D:. Todel jos nerodo nei Explorer, nei failu skaitytuvai: jie "
+    "skaiciuoja tik tai, kas yra po kuria nors raide.\n"
+    "  Tai NE ta atsarga, kuria diskas pasiima sau (rezerviniai sektoriai) - "
+    "anos is viso nemato nei Windows, nei jokia programa.":
+        "There is space on the disk that has no drive letter - it belongs "
+        "neither to C: nor to D:. That is why neither Explorer nor any file "
+        "scanner shows it: they count only what sits under some letter.\n"
+        "  This is NOT the reserve the drive keeps for itself (spare sectors) - "
+        "that one is invisible to Windows and to every program.",
+    "Particija didesne nei tomas, kuri mato failu sistema.":
+        "The partition is larger than the volume the file system sees.",
+    "Nepaskirstyta vieta (particija nedengia viso disko)":
+        "Unallocated space (the partition does not cover the whole disk)",
+    "Gamintojo arba atkurimo particija": "A vendor or recovery partition",
+    "HPA/DCO - gamintojo paslepta sritis (pasitaiko senuose diskuose)":
+        "HPA/DCO - an area hidden by the manufacturer (happens on older disks)",
+    "NTFS rezervas failu lentelei (MFT)":
+        "NTFS reserve for the file table (MFT)",
+    "Failu sistemos apskaita gali buti nusimususi po staigaus isjungimo":
+        "The file system's own accounting can drift after an abrupt shutdown",
+    "Failu sistemos duomenu": "file system data",
+    "Particijos dydzio": "the partition size",
+    "Kurioje disko vietoje guli tomas": "where on the disk the volume sits",
+    "Fizinio disko dydzio": "the physical disk size",
 }
 
 # Spalvu zymos: vidiniai raktai VISADA lietuviski (ZALIA/GELTONA/RAUDONA),
