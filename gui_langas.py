@@ -21,7 +21,7 @@ from models import COLOR_HEX, AGE_DAYS
 from kalba import t, spalva, zydra_del
 
 # Rodoma Apie... langelyje; galutini numeri nustatyti leidziant release
-VERSIJA = "1.3"
+VERSIJA = "1.4"
 
 # Lenteles teksto spalva. Visi musu eiluciu fonai sviesus (COLOR_HEX), todel tekstas
 # visada tamsus ir nustatomas KARTU su fonu - kitaip tamsi sistemos tema duoda balta

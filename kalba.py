@@ -252,6 +252,25 @@ _EN = {
     "- hibernacijos failas, dydis nuo atminties kiekio":
         "- the hibernation file, its size follows the amount of memory",
     "- moderniu programu mainai": "- swap for modern apps",
+    # Senos sistemos pozymiai ne sisteminiame diske (v1.4, Roberto sumanymas 09-18)
+    "SENOS SISTEMOS POZYMIAI": "TRACES OF AN OLD SYSTEM",
+    "Siame diske yra sisteminio disko pozymiu. Greiciausiai jis "
+    "kazkada buvo sisteminis - siulome susitvarkyti ir issivalyti.":
+        "This drive shows traces of a system drive. It was most likely a system drive "
+        "once - we suggest tidying it up and clearing it out.",
+    "Rasta:": "Found:",
+    "Paskutini karta naudotasi:": "Last used:",
+    "DEMESIO: viena is paskyru naudota neseniai - gali buti, "
+    "kad tai antroji veikianti sistema.":
+        "NOTE: one of the accounts was used recently - this may be a second working system.",
+    "Nieko netrinam ir nesiulom trinti - sprendziate jus.":
+        "We delete nothing and suggest nothing - you decide.",
+    "Windows registras": "Windows registry",
+    "Windows katalogas": "Windows folder",
+    "Naudotoju profiliai": "User profiles",
+    "Windows.old (senas atnaujinimas)": "Windows.old (previous upgrade)",
+    "pagefile.sys (mainu failas)": "pagefile.sys (page file)",
+    "hiberfil.sys (hibernacija)": "hiberfil.sys (hibernation)",
     "Seseliniu kopiju ir atkurimo tasku dydzio "
     "(be administratoriaus teisiu jo gauti neimanoma)":
         "the size of shadow copies and restore points "

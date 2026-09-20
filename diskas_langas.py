@@ -15,6 +15,7 @@ lygi, nes dirba su tomais.
 """
 
 import ctypes
+import time
 
 from PyQt6.QtCore import Qt, QRectF, QTimer
 from PyQt6.QtGui import (QPainter, QColor, QFont, QPen, QAction, QGuiApplication,
@@ -268,6 +269,48 @@ class DiskoLangas(QDialog):
     def _ar_buvo_skenas(self):
         return bool(getattr(self.parent(), "_candidates", None))
 
+    # Kiek laiko nenaudotas profilis, kad senos sistemos klausimas apskritai keltusi.
+    # ⛔ Dual boot apsauga: antra Windows sistema irgi atrodo „ne sistemine", bet yra GYVA.
+    # Vakar naudota — tylim; metus negyvenusi — sakom.
+    SENUMO_RIBA_D = 60
+
+    def _senos_sistemos_eilutes(self, info):
+        """Roberto sumanymas 2026-09-18: *„buna, zmogus paima sena sistemini diska ir ji kaip
+        isorini pasidaro, te nieko neisvale"*.
+
+        ⛔ Apie SISTEMINI diska nesakom nieko — `diskas.sistemos_pozymiai` jam grazina None.
+        ⛔ Jokio trynimo ir jokio mygtuko „valyti": tik pasakom, ka radom. Roberto zodziais —
+        *„siulau susitvarkyti, issivalyti"*, o daro zmogus pats.
+        ⛔ Rodom POZYMIU SARASA, ne verdikta „yra sistema": diskas *„gali but valyt bandytas,
+        bet ne pilnai"*, ir butent sarasas apie tai pasako.
+        """
+        p = info.get("sistemos_pozymiai")
+        if not p:
+            return []
+        # Jei profiliu yra ir jie SVIEZI - tai greiciausiai gyva antra sistema. Tylim.
+        sviezi = [x for x in p.get("profiliai", [])
+                  if x.get("naudota") and
+                  (time.time() - x["naudota"]) / 86400 < self.SENUMO_RIBA_D]
+        if sviezi and not p.get("stiprus"):
+            return []
+
+        eil = ["", t("SENOS SISTEMOS POZYMIAI")]
+        eil.append("  " + t("Siame diske yra sisteminio disko pozymiu. Greiciausiai jis "
+                            "kazkada buvo sisteminis - siulome susitvarkyti ir issivalyti."))
+        eil.append("  " + t("Rasta:") + " " + " · ".join(
+            t(_POZYMIU_VARDAI.get(r, r)) for r in p["rasti"]))
+        prof = [x for x in p.get("profiliai", []) if x.get("naudota")]
+        if prof:
+            naujausias = max(prof, key=lambda x: x["naudota"])
+            eil.append("  " + t("Paskutini karta naudotasi:") + " " +
+                       time.strftime("%Y-%m-%d", time.localtime(naujausias["naudota"])) +
+                       " (" + naujausias["vardas"] + ")")
+        if sviezi:
+            eil.append("  " + t("DEMESIO: viena is paskyru naudota neseniai - gali buti, "
+                                "kad tai antroji veikianti sistema."))
+        eil.append("  " + t("Nieko netrinam ir nesiulom trinti - sprendziate jus."))
+        return eil
+
     def _perpiesti(self):
         info = self._dabartinis()
         if not info:
@@ -364,6 +407,7 @@ class DiskoLangas(QDialog):
                            % (vardas, fmt(dydis), t(_SISTEMOS_PAAISKINIMAI.get(vardas, ""))))
             eil.append("  %s" % t("Siu failu trinti negalima - Windows juos "
                                   "naudoja dirbdamas."))
+        eil += self._senos_sistemos_eilutes(info)
         eil.append("")
 
         if info.get("nematome"):
@@ -670,4 +714,19 @@ _SISTEMOS_PAAISKINIMAI = {
     "pagefile.sys": "- mainu failas, Windows ji naudoja vietoj atminties",
     "hiberfil.sys": "- hibernacijos failas, dydis nuo atminties kiekio",
     "swapfile.sys": "- moderniu programu mainai",
+}
+
+# Senos sistemos pozymiu vardai zmogui. Rodom KA RADOM, o ne isvada:
+# dalis gali buti jau istrinta, ir butent sarasas apie tai pasako.
+_POZYMIU_VARDAI = {
+    "registras": "Windows registras",
+    "system32": "Windows\\System32",
+    "windows": "Windows katalogas",
+    "users": "Naudotoju profiliai",
+    "program_files": "Program Files",
+    "program_files_x86": "Program Files (x86)",
+    "programdata": "ProgramData",
+    "windows_old": "Windows.old (senas atnaujinimas)",
+    "pagefile": "pagefile.sys (mainu failas)",
+    "hiberfil": "hiberfil.sys (hibernacija)",
 }

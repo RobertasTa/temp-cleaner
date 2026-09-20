@@ -202,6 +202,101 @@ def sistemos_failai(raide):
     return ats
 
 
+def sisteminis_diskas():
+    """Kurio tomo raide dirba SI Windows. Apie ji nesakom nieko (Roberto salyga)."""
+    try:
+        return os.environ["SystemRoot"][0].upper()
+    except Exception:
+        return None
+
+
+# Sisteminio disko pozymiai. Tvarka - nuo stipriausio.
+# ⭐ `pagefile.sys` ir `hiberfil.sys` jau tikrinami `sistemos_failai()`, bet cia jie
+# reiskia kita: NE sisteminiame diske sukeitimu failas yra beveik tikras zenklas,
+# kad kazkada ten buvo idiegta Windows.
+_POZYMIAI = [
+    # (raktas, santykinis kelias, ar_katalogas)
+    ("registras", r"Windows\System32\config\SYSTEM", False),
+    ("system32", r"Windows\System32", True),
+    ("windows", "Windows", True),
+    ("users", "Users", True),
+    ("program_files", "Program Files", True),
+    ("program_files_x86", "Program Files (x86)", True),
+    ("programdata", "ProgramData", True),
+    ("windows_old", "Windows.old", True),
+    ("pagefile", "pagefile.sys", False),
+    ("hiberfil", "hiberfil.sys", False),
+]
+
+
+def sistemos_pozymiai(raide):
+    """Ar sitas NE sisteminis diskas kazkada buvo sisteminis.
+
+    Roberto sumanymas 2026-09-18: *„buna, zmogus paima sena sistemini diska ir ji kaip
+    isorini pasidaro, te nieko neisvale"* - tokio disko musu skirtukas iki siol nematydavo
+    NIEKO: vieta „sueina", nes failai suskaiciuoti, tik zmogus nezino, kad tai senos
+    sistemos likuciai.
+
+    ⛔ Grazinam POZYMIU SARASA, ne verdikta „yra sistema". Roberto patikslinimas: diskas
+    *„gali but valyt bandytas, bet ne pilnai"* - tada dalies pozymiu nebera, ir butent tas
+    sarasas apie tai pasako. Jokio verdikto, jokio pasiulymo trinti.
+
+    Grazina None, jei tai SISTEMINIS diskas (apie ji nesakom nieko) arba jei nieko nerasta.
+    """
+    if not raide or raide.upper() == (sisteminis_diskas() or ""):
+        return None
+    return pozymiai_kelyje(raide + ":\\")
+
+
+def pozymiai_kelyje(saknis):
+    """Ta pati paieska, tik nuo bet kokios saknies — kad patikra galetu paduoti netikra diska."""
+    rasti, keliai = [], {}
+    for raktas, kelias, ar_katalogas in _POZYMIAI:
+        pilnas = os.path.join(saknis, kelias)
+        try:
+            yra = os.path.isdir(pilnas) if ar_katalogas else os.path.isfile(pilnas)
+        except OSError:
+            yra = False
+        if yra:
+            rasti.append(raktas)
+            keliai[raktas] = pilnas
+    if not rasti:
+        return None
+    return {
+        "rasti": rasti,
+        "keliai": keliai,
+        "profiliai": _profiliai(saknis),
+        # Stiprus = registro kamienas ARBA sukeitimu failas: abu atsiranda tik per
+        # tikra idiegima, o nusikopijuoti katalogai ju neturi.
+        "stiprus": bool({"registras", "pagefile", "hiberfil"} & set(rasti)),
+    }
+
+
+def _profiliai(saknis):
+    """Naudotoju profiliai ir kada jais paskutini karta naudotasi.
+
+    ⛔ Dual boot apsauga: antra Windows sistema irgi atrodo „ne sistemine", bet yra GYVA.
+    `NTUSER.DAT` keitimo data pasako, kada tuo profiliu kas nors naudojosi — metus
+    negyvenusi sistema ir vakar naudota atrodo visiskai skirtingai.
+    """
+    users = os.path.join(saknis, "Users")
+    ats = []
+    try:
+        vardai = os.listdir(users)
+    except OSError:
+        return ats
+    for v in vardai:
+        if v.lower() in ("public", "default", "default user", "all users",
+                         "defaultaccount", "wdagutilityaccount"):
+            continue
+        dat = os.path.join(users, v, "NTUSER.DAT")
+        try:
+            ats.append({"vardas": v, "naudota": os.stat(dat).st_mtime})
+        except OSError:
+            ats.append({"vardas": v, "naudota": None})
+    return ats
+
+
 def vietiniai_tomai():
     """Vietiniai IR prijungti isoriniai diskai; be tinklo ir be CD.
 
@@ -264,9 +359,11 @@ def suvesk(raide, visi_tomai_sarasas=None):
         disko_dydis = diskai.get(vieta["disko_nr"])
 
     sist = sistemos_failai(raide)
+    pozymiai = sistemos_pozymiai(raide)
 
     r = {
         "raide": raide,
+        "sistemos_pozymiai": pozymiai,
         "fs": fs,
         "skaidinys": skaidinys,
         "vieta": vieta,
